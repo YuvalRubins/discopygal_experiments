@@ -16,11 +16,12 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
-                python-version: '3.x'
+                python-version: '3.11.9'
 
             - name: Install Discopygal
               run: |
                 python -m pip install --upgrade pip
+                pip install -r requirements.txt
                 pip install discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
