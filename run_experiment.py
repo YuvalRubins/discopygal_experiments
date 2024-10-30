@@ -57,7 +57,7 @@ if sys.argv[3] == "end":
         for c in os.listdir(chunk_dir):
             if c.startswith("scenario_"):
                 scenario_index = int(c.split('.')[0].split('_')[1])
-                shutil.copy(f"{chunk_dir}/{c}", f"{all_results_path}/scenario_{chunk_index_offset + scenario_index}")
+                shutil.copy(f"{chunk_dir}/{c}", f"{all_results_path}/scenario_{chunk_index_offset + scenario_index}.csv")
 
     all_results = pd.concat(results_per_chunk)
     all_results.sort_values(by=["scenario_index"])
