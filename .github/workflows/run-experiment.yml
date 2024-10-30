@@ -18,11 +18,18 @@ jobs:
               with:
                 python-version: '3.11.9'
 
+            - name: Cache Python packages
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/pip
+                  key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
+                  restore-keys: |
+                    ${{ runner.os }}-pip-
+
             - name: Install Discopygal
               run: |
                 python -m pip install --upgrade pip
-                pip install -r requirements.txt
-                pip install discopygal_taucgl-1.2.0-py3-none-any.whl
+                pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
               run: python experiment_drrt_star.py
