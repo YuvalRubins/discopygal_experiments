@@ -33,6 +33,8 @@ jobs:
 
     run-experiment-chunk:
         runs-on: ubuntu-latest
+        needs: config-job
+
 
         continue-on-error: true
 
