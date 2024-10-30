@@ -43,7 +43,7 @@ jobs:
                 pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
-              run: python experiment_drrt_star.py ${{ matrix.chunk }} ${{ matrix. }}
+              run: python experiment_drrt_star.py ${{ matrix.chunk }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
