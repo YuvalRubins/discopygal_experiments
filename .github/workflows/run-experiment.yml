@@ -12,9 +12,11 @@ jobs:
     run-python-script:
         runs-on: ubuntu-latest
 
+        continue-on-error: true
+
         strategy:
             matrix:
-              chunk: [0, 1]
+              chunk: [0, 1, 2000]
 
         steps:
             - name: Checkout Repository
@@ -41,7 +43,7 @@ jobs:
                 pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
-              run: python experiment_drrt_star.py ${{ matrix.chunk }}
+              run: python experiment_drrt_star.py ${{ matrix.chunk }} ${{ matrix. }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
