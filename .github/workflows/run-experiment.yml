@@ -83,7 +83,7 @@ jobs:
 
     sum_results:
         runs-on: ubuntu-latest
-        needs: run-experiment-chunk
+        needs: [startup-config, run-experiment-chunk]
 
         steps:
             - name: Checkout Repository
