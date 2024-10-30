@@ -44,7 +44,7 @@ jobs:
 
         strategy:
             matrix:
-              chunk: ${{ fromJson(needs.startup-config.outputs.chunks) }}
+              chunk: ${{ needs.startup-config.outputs.chunks }}
               # chunk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         steps:

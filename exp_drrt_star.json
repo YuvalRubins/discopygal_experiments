@@ -1,5 +1,5 @@
 {
     "scenarios_file": "experiment_drrt_star.py",
     "chunks": [0, 1],
-    "chunks_amount": 10
+    "chunks_amount": 100
 }
