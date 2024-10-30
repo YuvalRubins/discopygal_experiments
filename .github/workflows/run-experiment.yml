@@ -28,9 +28,11 @@ jobs:
                scenarios_file=$(jq -r '.scenarios_file' $config_file)
                chunks_amount=$(jq -r '.chunks_amount' $config_file)
 
-               echo "{chunks}={$chunks}" >> $GITHUB_OUTPUT
-               echo "{scenarios_file}={$scenarios_file}" >> $GITHUB_OUTPUT
-               echo "{chunks_amount}={$chunks_amount}" >> $GITHUB_OUTPUT
+               {
+                echo "chunks=$chunks";
+                echo "scenarios_file=$scenarios_file";
+                echo "chunks_amount=$chunks_amount";
+               } >> $GITHUB_OUTPUT
 
                echo "scenarios_file: $scenarios_file"
                echo "chunks: $chunks"
@@ -44,7 +46,7 @@ jobs:
 
         strategy:
             matrix:
-              chunk: ${{ needs.startup-config.outputs.chunks }}
+              chunk: ${{ fromJson(needs.startup-config.outputs.chunks) }}
               # chunk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         steps:
