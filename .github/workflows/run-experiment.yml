@@ -9,7 +9,7 @@ on:
         #         default: 'main'
 
 jobs:
-    read-config:
+    startup-config:
       runs-on: ubuntu-latest
       outputs:
           chunks: ${{ steps.get-config.outputs.chunks }}
@@ -28,9 +28,9 @@ jobs:
                scenarios_file=$(jq -r '.scenarios_file' $config_file)
                chunks_amount=$(jq -r '.chunks_amount' $config_file)
 
-               echo "::set-output name=chunks::$chunks"
-               echo "::set-output name=scenarios_file::$scenarios_file"
-               echo "::set-output name=chunks_amount::$chunks_amount"
+               run: echo "{chunks}={$chunks}" >> $GITHUB_OUTPUT
+               run: echo "{scenarios_file}={$scenarios_file}" >> $GITHUB_OUTPUT
+               run: echo "{chunks_amount}={$chunks_amount}" >> $GITHUB_OUTPUT
 
                echo "scenarios_file: $scenarios_file"
                echo "chunks: $chunks"
@@ -38,13 +38,13 @@ jobs:
 
     run-experiment-chunk:
         runs-on: ubuntu-latest
-        needs: read-config
+        needs: startup-config
 
         continue-on-error: true
 
         strategy:
             matrix:
-              chunk: ${{ fromJson(needs.read-config.outputs.chunks) }}
+              chunk: ${{ fromJson(needs.startup-config.outputs.chunks) }}
               # chunk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         steps:
@@ -70,7 +70,7 @@ jobs:
                 pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
-              run: python run_experiment.py ${{ fromJson(needs.read-config.outputs.scenarios_file) }} ${{ matrix.chunk }} ${{ fromJson(needs.read-config.outputs.chunks_amount) }}
+              run: python run_experiment.py ${{ needs.startup-config.outputs.scenarios_file }} ${{ matrix.chunk }} ${{ needs.startup-config.outputs.chunks_amount }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
