@@ -1,0 +1,34 @@
+name: Run Experiment
+
+on:
+    workflow_dispatch:  # Manual trigger only
+
+jobs:
+    run-python-script:
+        runs-on: ubuntu-latest
+
+        timeout-minutes: 4320
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.x'
+
+            - name: Install Discopygal
+              run: |
+                python -m pip install --upgrade pip
+                pip install discopygal_taucgl-1.2.0-py3-none-any.whl
+
+            - name: Run Experiment Script
+              run: python experiment_drrt_star.py
+
+            - name: Upload CSV Files as Artifact
+              uses: actions/upload-artifact@v3
+              with:
+              name: results
+              path: ./results_drrt_star
+              retention-days: 7  # Keep artifacts for 7 days
