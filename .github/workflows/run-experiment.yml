@@ -28,9 +28,9 @@ jobs:
                scenarios_file=$(jq -r '.scenarios_file' $config_file)
                chunks_amount=$(jq -r '.chunks_amount' $config_file)
 
-               run: echo "{chunks}={$chunks}" >> $GITHUB_OUTPUT
-               run: echo "{scenarios_file}={$scenarios_file}" >> $GITHUB_OUTPUT
-               run: echo "{chunks_amount}={$chunks_amount}" >> $GITHUB_OUTPUT
+               echo "{chunks}={$chunks}" >> $GITHUB_OUTPUT
+               echo "{scenarios_file}={$scenarios_file}" >> $GITHUB_OUTPUT
+               echo "{chunks_amount}={$chunks_amount}" >> $GITHUB_OUTPUT
 
                echo "scenarios_file: $scenarios_file"
                echo "chunks: $chunks"
