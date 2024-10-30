@@ -1,3 +1,4 @@
+import sys
 import itertools
 
 from discopygal.experiments.scenarios_runner import run_scenarios, Scenario
@@ -35,7 +36,9 @@ scenes = ["scenes/tunnels_disc.json",
 scenarios = [Scenario(dRRT_star, scene, {"prm_num_landmarks": 1000, "num_landmarks": 100, "random_sample_counter": random_sample_counter}) for
              random_sample_counter, scene in itertools.product(random_sample_counter_list, scenes)]
 
-scenarios = [Scenario(dRRT_star, "scenes/tunnels_disc.json")]
+scenarios = [Scenario(dRRT_star, scene) for scene in scenes[:2]]
 
+chunk = int(sys.argv[1])
+print(f"{chunk=}")
 
-run_scenarios(scenarios, "results_drrt_star", resume_latest=True)
+run_scenarios([scenarios[chunk]], "results_drrt_star", resume_latest=True)

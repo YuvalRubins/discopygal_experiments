@@ -2,16 +2,25 @@ name: Run Experiment
 
 on:
     workflow_dispatch:  # Manual trigger only
+        inputs:
+            commit_sha:
+                description: 'Commit SHA to run the experiment'
+                required: true
+                default: 'main'
 
 jobs:
     run-python-script:
         runs-on: ubuntu-latest
 
-        timeout-minutes: 4320
+        strategy:
+            matrix:
+              chunk: [1, 2, 3, 4, 5]
 
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
+              with:
+                ref: ${{ github.event.inputs.commit_sha }}
 
             - name: Set up Python
               uses: actions/setup-python@v4
@@ -32,7 +41,7 @@ jobs:
                 pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
-              run: python experiment_drrt_star.py
+              run: python experiment_drrt_star.py ${{ matrix.chunk }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
