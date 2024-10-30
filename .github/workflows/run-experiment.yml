@@ -9,14 +9,15 @@ on:
         #         default: 'main'
 
 jobs:
-    run-python-script:
+    run-experiment-chunk:
         runs-on: ubuntu-latest
 
         continue-on-error: true
 
         strategy:
             matrix:
-              chunk: [0, 1, 2000]
+              chunk: [0, 1]
+              # chunk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         steps:
             - name: Checkout Repository
@@ -43,11 +44,29 @@ jobs:
                 pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
 
             - name: Run Experiment Script
-              run: python experiment_drrt_star.py ${{ matrix.chunk }}
+              run: python run_experiment.py experiment_drrt_star.py ${{ matrix.chunk }} 10
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
               with:
                 name: results
-                path: ./results_drrt_star
+                path: ./results
+                retention-days: 7  # Keep artifacts for 7 days
+
+    sum_results:
+        runs-on: ubuntu-latest
+        needs: run-experiment-chunk
+
+        steps:
+          - name: Download Results
+            uses: actions/download-artifact@v3
+
+          - name: Process results
+            run: python run_experiment.py end
+
+          - name: Re-upload Updated Results
+            uses: actions/upload-artifact@v3
+            with:
+                name: results
+                path: ./results
                 retention-days: 7  # Keep artifacts for 7 days

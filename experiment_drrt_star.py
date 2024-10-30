@@ -1,9 +1,7 @@
-import sys
 import itertools
 
-from discopygal.experiments.scenarios_runner import run_scenarios, Scenario
+from discopygal.experiments.scenarios_runner import Scenario
 from discopygal.solvers.rrt.drrt_star import dRRT_star
-from discopygal.solvers.prm.prm import PRM
 
 # num_of_landmarks = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600,
 #                     2800, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000]
@@ -33,11 +31,5 @@ scenes = ["scenes/tunnels_disc.json",
           "scenes/two_free_discs3.json"]
 
 
-scenarios_chunks = [
-    [Scenario(dRRT_star, scene, {"prm_num_landmarks": 1000, "num_landmarks": 100, "random_sample_counter": random_sample_counter}) for random_sample_counter in random_sample_counter_list]
-        for scene in scenes]
-
-chunk = int(sys.argv[1])
-print(f"{chunk=}")
-
-run_scenarios(scenarios_chunks[chunk], f"results_drrt_star/chunk_{chunk}")
+SCENARIOS = [Scenario(dRRT_star, scene, {"prm_num_landmarks": 1000, "num_landmarks": 100, "random_sample_counter": random_sample_counter})
+             for random_sample_counter, scene in itertools.product(random_sample_counter_list, scenes)]
