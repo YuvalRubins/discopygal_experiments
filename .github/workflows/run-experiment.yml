@@ -58,8 +58,19 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Set Discopygal environment
-              uses: .github/actions/set_discopygal_environmet
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.11.9'
+
+            - name: Cache Python packages
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/pip
+                  key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
+
+            - name: Install Discopygal
+              run: pip install -v *.whl
 
             - name: Run Experiment Script
               run: python run_experiment.py ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
@@ -79,8 +90,19 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Set Discopygal environment
-              uses: .github/actions/set_discopygal_environmet
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.11.9'
+
+            - name: Cache Python packages
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/pip
+                  key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
+
+            - name: Install Discopygal
+              run: pip install -v *.whl
 
             - name: Download Results
               uses: actions/download-artifact@v3
