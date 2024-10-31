@@ -76,7 +76,7 @@ jobs:
               run: pip install -v *.whl
 
             - name: Run Experiment Script
-              run: python run_experiment.py ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
+              run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
@@ -114,7 +114,7 @@ jobs:
                   path: ./results
 
             - name: Process results
-              run: python run_experiment.py ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
+              run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
             - name: Re-upload Updated Results
               uses: actions/upload-artifact@v3
