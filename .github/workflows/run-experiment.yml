@@ -80,7 +80,7 @@ jobs:
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v3
               with:
-                
+                name: results
                 path: ./results
                 retention-days: 7  # Keep artifacts for 7 days
 
