@@ -80,7 +80,7 @@ jobs:
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v4
               with:
-                name: results
+                name: results_chunk_${{ matrix.chunk }}
                 path: ./results
                 retention-days: 7  # Keep artifacts for 7 days
 
