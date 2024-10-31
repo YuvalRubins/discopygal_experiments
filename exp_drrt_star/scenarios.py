@@ -19,11 +19,12 @@ from discopygal.solvers.rrt.drrt_star import dRRT_star
 
 random_sample_counter_list = [0, 1, 10, 20, 30, 50, 75, 100, 200, 500]
 
-scenes = ["scenes/tunnels_disc.json",
+scenes = [
+          "scenes/legacy/2_monster_disc.json",
+          "scenes/tunnels_disc.json",
           "scenes/coffee_shop/coffee_shop.json",
           "scenes/2_discs_corridor.json",
           "scenes/2_pocket_maze_tight.json",
-          "scenes/legacy/2_monster_disc.json",
           "scenes/legacy/3_glass_disc.json",
           "scenes/3_discs1.json",
           "scenes/vertical_clearance_maze_disc.json",
