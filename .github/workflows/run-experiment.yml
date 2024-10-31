@@ -21,6 +21,7 @@ jobs:
           chunks: ${{ steps.get-config.outputs.chunks }}
           scenarios_file: ${{ steps.get-config.outputs.scenarios_file }}
           chunks_amount: ${{ steps.get-config.outputs.chunks_amount }}
+          python_version: ${{ steps.get-config.outputs.python_version }}
 
       steps:
         - name: Checkout code
@@ -38,6 +39,7 @@ jobs:
                 echo "chunks=$chunks";
                 echo "scenarios_file=$scenarios_file";
                 echo "chunks_amount=$chunks_amount";
+                echo "python_version=3.11.9";           # Python version
                } >> $GITHUB_OUTPUT
 
                echo "scenarios_file: $scenarios_file"
@@ -61,7 +63,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
-                python-version: '3.11.9'
+                python-version: ${{ needs.startup-config.outputs.python_version }}
 
             - name: Cache Python packages
               uses: actions/cache@v3
@@ -93,7 +95,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v4
               with:
-                python-version: '3.11.9'
+                python-version: ${{ needs.startup-config.outputs.python_version }}
 
             - name: Cache Python packages
               uses: actions/cache@v3
