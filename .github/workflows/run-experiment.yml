@@ -59,7 +59,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Set Discopygal environment
-              uses: ./github/actions/set_discopygal_environmet
+              uses: .github/actions/set_discopygal_environmet
 
             - name: Run Experiment Script
               run: python run_experiment.py ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
@@ -80,7 +80,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Set Discopygal environment
-              uses: ./github/actions/set_discopygal_environmet
+              uses: .github/actions/set_discopygal_environmet
 
             - name: Download Results
               uses: actions/download-artifact@v3
