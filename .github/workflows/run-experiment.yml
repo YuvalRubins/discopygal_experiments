@@ -25,7 +25,7 @@ jobs:
 
       steps:
         - name: Checkout code
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
 
         - name: Read JSON Config
           id: get-config
@@ -45,6 +45,7 @@ jobs:
                echo "scenarios_file: $scenarios_file"
                echo "chunks: $chunks"
                echo "chunks_amount: $chunks_amount"
+               echo "python_version: $python_version"
 
     run-experiment-chunk:
         runs-on: ubuntu-latest
@@ -58,7 +59,7 @@ jobs:
 
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Set up Python
               uses: actions/setup-python@v4
@@ -90,7 +91,7 @@ jobs:
 
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Set up Python
               uses: actions/setup-python@v4
