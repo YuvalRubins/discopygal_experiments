@@ -14,8 +14,8 @@ on:
 
 jobs:
     startup-config:
-      runs-on: ubuntu-latest
-      # runs-on: ubuntu-20.04
+      # runs-on: ubuntu-latest
+      runs-on: ubuntu-20.04
 
       outputs:
           chunks: ${{ steps.get-config.outputs.chunks }}
@@ -48,7 +48,8 @@ jobs:
                echo "python_version: $python_version"
 
     run-experiment-chunk:
-        runs-on: ubuntu-latest
+        # runs-on: ubuntu-latest
+        runs-on: ubuntu-20.04
         needs: startup-config
 
         continue-on-error: true
@@ -86,7 +87,8 @@ jobs:
                 retention-days: 7  # Keep artifacts for 7 days
 
     sum_results:
-        runs-on: ubuntu-latest
+        # runs-on: ubuntu-latest
+        runs-on: ubuntu-20.04
         needs: [startup-config, run-experiment-chunk]
 
         steps:
