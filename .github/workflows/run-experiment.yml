@@ -2,7 +2,11 @@ name: Run Experiment
 
 on:
     workflow_dispatch:  # Manual trigger only
-        # inputs:
+        inputs:
+            experiment_config:
+                description: 'Configuration file of experiment to run'
+                required: true
+                default: 'exp_drrt_star/exp_config.json'
         #     commit_sha:
         #         description: 'Commit SHA to run the experiment'
         #         required: true
@@ -25,7 +29,7 @@ jobs:
         - name: Read JSON Config
           id: get-config
           run: |
-               config_file=exp_drrt_star.json
+               config_file=${{ github.event.inputs.experiment_config }}
                chunks=$(jq -c '.chunks' $config_file)
                scenarios_file=$(jq -r '.scenarios_file' $config_file)
                chunks_amount=$(jq -r '.chunks_amount' $config_file)
@@ -49,27 +53,10 @@ jobs:
         strategy:
             matrix:
               chunk: ${{ fromJson(needs.startup-config.outputs.chunks) }}
-              # chunk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
         steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v3
-            #   with:
-            #     ref: ${{ github.event.inputs.commit_sha }}
-
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.11.9'
-
-            - name: Cache Python packages
-              uses: actions/cache@v3
-              with:
-                  path: ~/.cache/pip
-                  key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
-
-            - name: Install Discopygal
-              run: pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
+            - name: Set Discopygal environment
+              uses: ./github/actions/set_discopygal_environmet.yml
 
             - name: Run Experiment Script
               run: python run_experiment.py ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
@@ -86,22 +73,8 @@ jobs:
         needs: [startup-config, run-experiment-chunk]
 
         steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v3
-
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.11.9'
-
-            - name: Cache Python packages
-              uses: actions/cache@v3
-              with:
-                  path: ~/.cache/pip
-                  key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
-
-            - name: Install Discopygal
-              run: pip install -v discopygal_taucgl-1.2.0-py3-none-any.whl
+            - name: Set Discopygal environment
+              uses: ./github/actions/set_discopygal_environmet.yml
 
             - name: Download Results
               uses: actions/download-artifact@v3
