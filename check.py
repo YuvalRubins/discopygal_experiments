@@ -2,4 +2,4 @@ import time
 
 for i in range(3600 * 5):
     print(i)
-    time.sleep(i)
+    time.sleep(1)

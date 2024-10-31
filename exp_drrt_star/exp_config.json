@@ -1,11 +1,11 @@
 {
     "scenarios_file": "exp_drrt_star/scenarios.py",
-    "chunks3": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "chunks": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     "chunks4": [0, 1],
     "chunks_amount": 10,
 
     "chunks_amount4": 1,
-    "chunks": [0],
+    "chunks3": [0],
 
     "chunks_amount2": 100,
     "chunks2": [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
