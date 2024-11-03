@@ -30,9 +30,26 @@ jobs:
           id: get-config
           run: |
                config_file=${{ github.event.inputs.experiment_config }}
-               chunks=$(jq -c '.chunks' $config_file)
                scenarios_file=$(jq -r '.scenarios_file' $config_file)
                chunks_amount=$(jq -r '.chunks_amount' $config_file)
+
+               if [[ "$chunks_amount" == '*' ]]; then
+                   chunks_amount=$(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers;
+                                              scenarios, _ = load_scenarios_and_handlers(\"$scenarios_file\");
+                                              print(len(scenarios))")
+               fi
+
+               # Max amount of jobs is 256
+               if (( $chunks_amount > 256 )); then
+                  chunks_amount=256
+               fi
+
+               chunks=$(jq -r '.chunks' $config_file)
+               if [[ "$chunks" == '*' ]]; then
+                   chunks=$(python -c "print(list(range($chunks_amount)))")
+               else
+                   chunks=$(jq -c '.chunks' $config_file)
+               fi
 
                {
                 echo "chunks=$chunks";
