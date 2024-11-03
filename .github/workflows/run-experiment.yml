@@ -26,6 +26,23 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v4
 
+        - name: Set python version
+          run: echo "python_version=3.11.9" >> $GITHUB_OUTPUT
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: $python_version
+
+        - name: Cache Python packages
+          uses: actions/cache@v4
+          with:
+              path: ~/.cache/pip
+              key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
+
+        - name: Install Discopygal
+          run: pip install -v *.whl
+
         - name: Read JSON Config
           id: get-config
           run: |
@@ -53,7 +70,6 @@ jobs:
                 echo "chunks=$chunks";
                 echo "scenarios_file=$scenarios_file";
                 echo "chunks_amount=$chunks_amount";
-                echo "python_version=3.11.9";           # Python version
                } >> $GITHUB_OUTPUT
 
                echo "scenarios_file: $scenarios_file"
