@@ -1,5 +1,8 @@
 name: Run Experiment
 
+env:
+  PYTHON_VERSION: 3.11.9
+
 on:
     workflow_dispatch:  # Manual trigger only
         inputs:
@@ -27,12 +30,12 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Set python version
-          run: echo "python_version=3.11.9" >> $GITHUB_OUTPUT
+          run: echo >> $GITHUB_OUTPUT
 
         - name: Set up Python
           uses: actions/setup-python@v5
           with:
-            python-version: $python_version
+            python-version: ${{ env.PYTHON_VERSION }}
 
         - name: Cache Python packages
           uses: actions/cache@v4
@@ -75,7 +78,6 @@ jobs:
                echo "scenarios_file: $scenarios_file"
                echo "chunks: $chunks"
                echo "chunks_amount: $chunks_amount"
-               echo "python_version: $python_version"
 
     run-experiment-chunk:
         runs-on: ubuntu-latest
@@ -94,7 +96,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                python-version: ${{ needs.startup-config.outputs.python_version }}
+                python-version: ${{ env.PYTHON_VERSION }}
 
             - name: Cache Python packages
               uses: actions/cache@v4
@@ -126,7 +128,7 @@ jobs:
             - name: Set up Python
               uses: actions/setup-python@v5
               with:
-                python-version: ${{ needs.startup-config.outputs.python_version }}
+                python-version: ${{ env.PYTHON_VERSION }}
 
             - name: Cache Python packages
               uses: actions/cache@v4
