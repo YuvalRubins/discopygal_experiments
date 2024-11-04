@@ -152,6 +152,6 @@ jobs:
                   retention-days: 7  # Keep artifacts for 7 days
 
             - name: Delete temporary chunk artifacts
-            - uses: geekyeggo/delete-artifact@v5
+              uses: geekyeggo/delete-artifact@v5
               with:
                   name: chunk_*
