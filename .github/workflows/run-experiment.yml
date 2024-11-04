@@ -108,10 +108,10 @@ jobs:
               run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
 
             - name: Upload CSV Files as Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
-                name: results
-                path: ./results
+                name: chunk_${{ matrix.chunk }}
+                path: ./results/${{ matrix.chunk }}
                 retention-days: 7  # Keep artifacts for 7 days
 
     sum_results:
@@ -137,16 +137,15 @@ jobs:
               run: pip install -v *.whl
 
             - name: Download Results
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
-                  name: results
                   path: ./results
 
             - name: Process results
               run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
             - name: Re-upload Updated Results
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: results
                   path: ./results

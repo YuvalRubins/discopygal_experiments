@@ -17,7 +17,8 @@ from discopygal.solvers.rrt.drrt_star import dRRT_star
 # extra_handlers = {"size_of_roadmap": lambda _, solver: len(solver.roadmap.edges),
 #                   "num_of_nodes": lambda _, solver: len(solver.roadmap.points)}
 
-random_sample_counter_list = [0, 1, 10, 20, 30, 50, 70, 90, 100, 200]
+# random_sample_counter_list = [0, 1, 10, 20, 30, 50, 75, 100, 200, 500]
+random_sample_counter_list = [0, 1] #, 10, 20, 30, 50, 70, 90, 100, 200]
 
 scenes = [
           "scenes/legacy/2_monster_disc.json",
