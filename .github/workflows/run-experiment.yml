@@ -111,7 +111,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: chunk_${{ matrix.chunk }}
-                path: ./results/${{ matrix.chunk }}
+                path: ./results/chunk_${{ matrix.chunk }}
                 retention-days: 7  # Keep artifacts for 7 days
 
     sum_results:
