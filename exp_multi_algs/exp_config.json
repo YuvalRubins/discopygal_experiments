@@ -1,0 +1,5 @@
+{
+    "scenarios_file": "exp_multi_algs/scenarios.py",
+    "chunks": "*",
+    "chunks_amount": "*"
+}
