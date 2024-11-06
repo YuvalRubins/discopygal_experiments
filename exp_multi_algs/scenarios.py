@@ -21,6 +21,8 @@ def get_params(solver_class, budget):
 
 
 def calc_budget(solver):
+    if solver.roadmap is None:
+        return None
     if isinstance(solver, PRM):
         return len(solver.roadmap.edges)
     elif isinstance(solver, RRT):
@@ -47,4 +49,3 @@ SCENARIOS = [Scenario(solver, scene, get_params(solver, budget))
              for solver, scene, budget in itertools.product([PRM, RRT, RRT_star, dRRT, dRRT_star], scenes, budgets)]
 
 RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver)}
-
