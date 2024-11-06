@@ -22,7 +22,7 @@ def get_params(solver_class, budget):
 
 def calc_budget(solver):
     if solver.roadmap is None:
-        return None
+        return float("Nan")
     if isinstance(solver, PRM):
         return len(solver.roadmap.edges)
     elif isinstance(solver, RRT):
