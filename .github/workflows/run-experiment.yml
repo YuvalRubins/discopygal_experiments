@@ -170,6 +170,12 @@ jobs:
               with:
                   path: ./results
 
+            - name: Download scenarios file
+              uses: actions/download-artifact@v4
+              with:
+                  name: scenarios_file
+                  path: ${{ needs.startup-config.outputs.scenarios_file_dir }}
+
             - name: Process results
               run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
