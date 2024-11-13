@@ -132,7 +132,9 @@ jobs:
                   path: ${{ needs.startup-config.outputs.scenarios_file }}
 
             - name: Run Experiment Script
-              run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
+              run: |
+                   ls -R .
+                   scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v4
@@ -170,6 +172,14 @@ jobs:
 
             - name: Process results
               run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
+
+            # - name: De-shuffle results
+            #   run: |
+            #     if [[ $should_shuffle_scenarios != 1 ]]; then
+            #         scenarios_pickle=$(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$original_scenarios_file\"); import random; random.shuffle(scenarios); import pickle; print(pickle.dumps(scenarios))")
+            #         echo -e "\nimport pickle\nSCENARIOS=pickle.loads($scenarios_pickle)\n" >> $scenarios_file
+            #     fi
+
 
             - name: Re-upload Updated Results
               uses: actions/upload-artifact@v4
