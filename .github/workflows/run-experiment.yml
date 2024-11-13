@@ -134,9 +134,7 @@ jobs:
                   path: ${{ needs.startup-config.outputs.scenarios_file_dir }}
 
             - name: Run Experiment Script
-              run: |
-                   ls -R .
-                   scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
+              run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} ${{ matrix.chunk }}
 
             - name: Upload CSV Files as Artifact
               uses: actions/upload-artifact@v4
@@ -175,19 +173,17 @@ jobs:
             - name: Process results
               run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
-            # - name: De-shuffle results
-            #   run: |
-            #     if [[ $should_shuffle_scenarios != 1 ]]; then
-            #         scenarios_pickle=$(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$original_scenarios_file\"); import random, binascii, pickle; random.shuffle(scenarios); print(binascii.hexlify(pickle.dumps(scenarios)))")
-            #         echo -e "\nimport pickle, binascii\nSCENARIOS=pickle.loads(binascii.unhexlify($scenarios_pickle))\n" >> $scenarios_file
-            #     fi
-
+            - name: De-shuffle results
+              run: |
+                if [[ $should_shuffle_scenarios == 1 ]]; then
+                    python deshuffle_results.py ${{ needs.startup-config.outputs.original_scenarios_file }} results
+                fi
 
             - name: Re-upload Updated Results
               uses: actions/upload-artifact@v4
               with:
                   name: results
-                  path: ./results
+                  path: ./results/all
                   retention-days: 7  # Keep artifacts for 7 days
 
             - name: Delete temporary chunk artifacts
