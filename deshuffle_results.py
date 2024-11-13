@@ -27,7 +27,7 @@ results_table = pd.read_csv(f"{all_results_path}/results.csv")
 #                      index, scenario in enumerate(scenarios)}
 
 random.seed(0)
-shuffled_index_to_original_index = range(len(results_table))
+shuffled_index_to_original_index = list(range(len(results_table)))
 random.shuffle(shuffled_index_to_original_index)
 # shuffled_index_to_original_index = [get_original_scenarios_index(shuffled_index, results_table)
 #                                     for shuffled_index in range(len(results_table))]
