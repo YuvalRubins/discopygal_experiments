@@ -183,7 +183,7 @@ jobs:
 
             - name: De-shuffle results
               run: |
-                   if [[ $should_shuffle_scenarios == 1 ]]; then
+                   if [[ ${{ needs.startup-config.outputs.should_shuffle_scenarios }} == 1 ]]; then
                        python deshuffle_results.py ${{ needs.startup-config.outputs.original_scenarios_file }} results
                    fi
 
