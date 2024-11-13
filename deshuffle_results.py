@@ -22,7 +22,7 @@ def get_original_scenarios_index(scenario_index, results_table):
 results_table = pd.read_csv(f"{all_results_path}/results.csv")
 all_ordered_results_path = pd.DataFrame(columns=results_table.columns)
 
-scenario_to_index = {(scenario.solver_class, scenario.scene_path, scenario.parameters): index for
+scenario_to_index = {(scenario.solver_class.__name__, scenario.scene_path, str(scenario.parameters)): index for
                      index, scenario in enumerate(scenarios)}
 
 shuffled_index_to_original_index = [get_original_scenarios_index(shuffled_index, results_table)
