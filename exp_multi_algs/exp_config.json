@@ -1,5 +1,6 @@
 {
     "scenarios_file": "exp_multi_algs/scenarios.py",
     "chunks": "*",
-    "chunks_amount": "*"
+    "chunks_amount": "*",
+    "should_shuffle_scenarios": 1
 }
