@@ -55,7 +55,7 @@ jobs:
                should_shuffle_scenarios=$(jq -r '.should_shuffle_scenarios' $config_file)
 
                if [[ "$chunks_amount" == '*' ]]; then
-                   chunks_amount=$(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$scenarios_file\"); print(len(scenarios))")
+                   chunks_amount=$(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$original_scenarios_file\"); print(len(scenarios))")
                fi
 
                if (( $chunks_amount > ${{ env.MAX_JOBS }} )); then
@@ -85,7 +85,7 @@ jobs:
                 cp $original_scenarios_file $scenarios_file
 
                 if [[ "$should_shuffle_scenarios" == '1' ]]; then
-                    scenarios_pickle=echo $(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$scenarios_file\"); import random; random.shuffle(scenarios); import pickle; print(pickle.dumps(scenarios))")
+                    scenarios_pickle=echo $(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$original_scenarios_file\"); import random; random.shuffle(scenarios); import pickle; print(pickle.dumps(scenarios))")
                     echo -e "\nimport pickle\nSCENARIOS=pickle.loads($scenarios_pickle)\n"
                 fi
 
