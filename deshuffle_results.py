@@ -25,8 +25,8 @@ for scenario_result_file in os.listdir(all_results_path):
         original_scenarios_index = shuffled_index_to_original_index[scenario_index]
         shutil.copy(f"{all_results_path}/{scenario_result_file}", f"{all_ordered_results_path}/scenario_{original_scenarios_index}.csv")
 
-results_table["index_scenario"] = shuffled_index_to_original_index
-results_table = results_table.sort_values("index_scenario")
+results_table["scenario_index"] = shuffled_index_to_original_index
+results_table = results_table.sort_values("scenario_index")
 results_table.to_csv(f"{all_ordered_results_path}/results.csv", index=False)
 # shutil.rmtree(all_results_path)
 # shutil.copytree(all_ordered_results_path, all_results_path)
