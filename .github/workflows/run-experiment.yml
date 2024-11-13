@@ -129,7 +129,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   name: scenarios_file
-                  path: ${{ needs.startup-config.outputs.scenarios_file }}
+                  path: $(dirname ${{ needs.startup-config.outputs.scenarios_file }})
 
             - name: Run Experiment Script
               run: |
