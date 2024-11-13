@@ -178,8 +178,7 @@ jobs:
 
             - name: Process results
               run: |
-                    # rm results/${{ needs.startup-config.outputs.scenarios_file }}
-                    ls -R
+                    rm -rf results/scenarios_file/
                     scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
             - name: De-shuffle results
