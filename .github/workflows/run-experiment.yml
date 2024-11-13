@@ -197,4 +197,4 @@ jobs:
             - name: Delete temporary chunk artifacts
               uses: geekyeggo/delete-artifact@v5
               with:
-                  name: chunk_*
+                  name: chunk_* scenarios_file

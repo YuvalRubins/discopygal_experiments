@@ -12,6 +12,7 @@ scenarios, _ = load_scenarios_and_handlers(scenarios_file)
 
 all_results_path = get_latest_dir(f"{results_path}/all")
 all_ordered_results_path = get_results_experiment_path(f"{results_path}/all_ordered")
+os.makedirs(all_ordered_results_path)
 
 
 def get_original_scenarios_index(scenario_index, results_table):
@@ -20,7 +21,6 @@ def get_original_scenarios_index(scenario_index, results_table):
 
 
 results_table = pd.read_csv(f"{all_results_path}/results.csv")
-all_ordered_results_path = pd.DataFrame(columns=results_table.columns)
 
 scenario_to_index = {(scenario.solver_class.__name__, scenario.scene_path, str(scenario.parameters)): index for
                      index, scenario in enumerate(scenarios)}
