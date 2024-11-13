@@ -167,6 +167,7 @@ jobs:
             - name: Download Results
               uses: actions/download-artifact@v4
               with:
+                  pattern: chunk_*
                   path: ./results
 
             - name: Download scenarios file
@@ -176,9 +177,7 @@ jobs:
                   path: ${{ needs.startup-config.outputs.scenarios_file_dir }}
 
             - name: Process results
-              run: |
-                    rm -rf results/scenarios_file/
-                    scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
+              run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
             - name: De-shuffle results
               run: |

@@ -14,23 +14,10 @@ scenarios, _ = load_scenarios_and_handlers(scenarios_file)
 all_results_path = get_latest_dir(f"{results_path}/all")
 all_ordered_results_path = get_results_experiment_path(f"{results_path}/all_ordered")
 os.makedirs(all_ordered_results_path)
-
-
-# def get_original_scenarios_index(scenario_index, results_table):
-#     scenario_entry = results_table.loc[scenario_index]
-#     return scenario_to_index[scenario_entry['solver_class'], scenario_entry['scene_path'], scenario_entry['parameters']]
-
-
 results_table = pd.read_csv(f"{all_results_path}/results.csv")
-
-# scenario_to_index = {(scenario.solver_class.__name__, scenario.scene_path, str(scenario.parameters)): index for
-#                      index, scenario in enumerate(scenarios)}
-
 random.seed(0)
 shuffled_index_to_original_index = list(range(len(results_table)))
 random.shuffle(shuffled_index_to_original_index)
-# shuffled_index_to_original_index = [get_original_scenarios_index(shuffled_index, results_table)
-#                                     for shuffled_index in range(len(results_table))]
 
 for scenario_result_file in os.listdir(all_results_path):
     if scenario_result_file.startswith("scenario_"):
@@ -39,7 +26,7 @@ for scenario_result_file in os.listdir(all_results_path):
         shutil.copy(f"{all_results_path}/{scenario_result_file}", f"{all_ordered_results_path}/scenario_{original_scenarios_index}.csv")
 
 results_table["index_scenario"] = shuffled_index_to_original_index
-results_table.sort_values("index_scenario")
+results_table = results_table.sort_values("index_scenario")
 results_table.to_csv(f"{all_ordered_results_path}/results.csv", index=False)
 # shutil.rmtree(all_results_path)
 # shutil.copytree(all_ordered_results_path, all_results_path)
