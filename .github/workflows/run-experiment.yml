@@ -2,6 +2,7 @@ name: Run Experiment
 
 env:
   PYTHON_VERSION: 3.11.9
+  MAX_JOBS: 300 # Max amount of jobs is 256
 
 on:
     workflow_dispatch:  # Manual trigger only
@@ -23,7 +24,6 @@ jobs:
           chunks: ${{ steps.get-config.outputs.chunks }}
           scenarios_file: ${{ steps.get-config.outputs.scenarios_file }}
           chunks_amount: ${{ steps.get-config.outputs.chunks_amount }}
-          python_version: ${{ steps.get-config.outputs.python_version }}
 
       steps:
         - name: Checkout code
@@ -54,9 +54,8 @@ jobs:
                    chunks_amount=$(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$scenarios_file\"); print(len(scenarios))")
                fi
 
-               # Max amount of jobs is 256
-               if (( $chunks_amount > 256 )); then
-                  chunks_amount=256
+               if (( $chunks_amount > ${{ env.MAX_JOBS }} )); then
+                  chunks_amount=${{ env.MAX_JOBS }}
                fi
 
                chunks=$(jq -r '.chunks' $config_file)

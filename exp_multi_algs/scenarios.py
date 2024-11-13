@@ -7,7 +7,7 @@ from discopygal.solvers.rrt.rrt_star import RRT_star
 from discopygal.solvers.rrt.drrt import dRRT
 from discopygal.solvers.rrt.drrt_star import dRRT_star
 
-budgets = range(100, 10_000, 100)
+budgets = range(100, 10_000 + 1, 100)
 
 
 def get_params(solver_class, budget):
