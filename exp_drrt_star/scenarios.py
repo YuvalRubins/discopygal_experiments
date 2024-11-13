@@ -38,3 +38,5 @@ scenes = [
 
 SCENARIOS = [Scenario(dRRT_star, scene, {"random_sample_counter": random_sample_counter})
              for random_sample_counter, scene in itertools.product(random_sample_counter_list, scenes)]
+
+SCENARIOS = SCENARIOS[:10]
