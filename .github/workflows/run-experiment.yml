@@ -85,7 +85,8 @@ jobs:
                 cp $original_scenarios_file $scenarios_file
 
                 if [[ "$should_shuffle_scenarios" == '1' ]]; then
-                    echo -e "\nimport random\nrandom.shuffle(SCENARIOS)\n" >> $scenarios_file
+                    scenarios_pickle=echo $(python -c "from discopygal.experiments.run_experiment import load_scenarios_and_handlers; scenarios, _ = load_scenarios_and_handlers(\"$scenarios_file\"); import random; random.shuffle(scenarios); import pickle; print(pickle.dumps(scenarios))")
+                    echo -e "\nimport pickle\nSCENARIOS=pickle.loads($scenarios_pickle)\n"
                 fi
 
         - name: Upload scenarios file
