@@ -24,6 +24,7 @@ jobs:
           chunks: ${{ steps.get-config.outputs.chunks }}
           original_scenarios_file: ${{ steps.get-config.outputs.original_scenarios_file }}
           scenarios_file: ${{ steps.get-config.outputs.scenarios_file }}
+          scenarios_file_dir: ${{ steps.get-config.outputs.scenarios_file_dir }}
           chunks_amount: ${{ steps.get-config.outputs.chunks_amount }}
           should_shuffle_scenarios: ${{ steps.get-config.outputs.should_shuffle_scenarios }}
 
@@ -75,6 +76,7 @@ jobs:
                 echo "scenarios_file=$scenarios_file";
                 echo "chunks_amount=$chunks_amount";
                 echo "should_shuffle_scenarios=$should_shuffle_scenarios";
+                echo "scenarios_file_dir=$(dirname $scenarios_file)";
                 } >> $GITHUB_OUTPUT
 
                 echo "scenarios_file: $original_scenarios_file"
@@ -92,7 +94,7 @@ jobs:
         - name: Upload scenarios file
           uses: actions/upload-artifact@v4
           with:
-            name: ${{ steps.get-config.outputs.scenarios_file }}
+            name: scenarios_file
             path: ${{ steps.get-config.outputs.scenarios_file }}
             retention-days: 7
 
@@ -128,7 +130,8 @@ jobs:
             - name: Download scenarios file
               uses: actions/download-artifact@v4
               with:
-                  name: ${{ needs.startup-config.outputs.scenarios_file }}
+                  name: scenarios_file
+                  path: ${{ needs.startup-config.outputs.scenarios_file_dir }}
 
             - name: Run Experiment Script
               run: |
