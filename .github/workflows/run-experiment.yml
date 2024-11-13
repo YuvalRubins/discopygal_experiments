@@ -177,13 +177,16 @@ jobs:
                   path: ${{ needs.startup-config.outputs.scenarios_file_dir }}
 
             - name: Process results
-              run: scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
+              run: |
+                    # rm results/${{ needs.startup-config.outputs.scenarios_file }}
+                    ls -R
+                    scenarios_runner results ${{ needs.startup-config.outputs.scenarios_file }} ${{ needs.startup-config.outputs.chunks_amount }} end
 
             - name: De-shuffle results
               run: |
-                if [[ $should_shuffle_scenarios == 1 ]]; then
-                    python deshuffle_results.py ${{ needs.startup-config.outputs.original_scenarios_file }} results
-                fi
+                   if [[ $should_shuffle_scenarios == 1 ]]; then
+                       python deshuffle_results.py ${{ needs.startup-config.outputs.original_scenarios_file }} results
+                   fi
 
             - name: Re-upload Updated Results
               uses: actions/upload-artifact@v4
