@@ -16,23 +16,25 @@ def get_params(solver_class, budget):
     return {
         PRM: {"num_landmarks": budget // PRM_AVERAGE_EDGES_PER_NODE},                     # budget = num of edges
         RRT: {"num_landmarks": budget},                                                   # budget = num of landmarks
-        RRT_star: {"num_landmarks": budget},                                              # budget = num of landmarks
-        dRRT: {"num_landmarks": budget // 4, "prm_num_landmarks": 3 * budget // 4},       # budget = num of prm edges + num_of_landmarks (ratio 1:4)
-        dRRT_star: {"num_landmarks": budget // 40, "prm_num_landmarks": 3 * budget // 4}  # budget = num of prm edges + numer_of_landmarks * num_of_expands
+        RRT_star: {"num_landmarks": budget, 'radius': 5},                                 # budget = num of landmarks
+        dRRT: {"num_landmarks": budget // PRM_AVERAGE_EDGES_PER_NODE, "prm_num_landmarks": 4 * budget // PRM_AVERAGE_EDGES_PER_NODE},       # budget = num of prm edges + num_of_landmarks (ratio 1:4)
+        dRRT_star: {"num_landmarks": budget // (PRM_AVERAGE_EDGES_PER_NODE * 10), "prm_num_landmarks": 4 * budget // (PRM_AVERAGE_EDGES_PER_NODE * 10)}  # budget = num of prm edges + num_of_landmarks * num_of_expands
+        # dRRT: {"num_landmarks": budget // 4, "prm_num_landmarks": 3 * budget // PRM_AVERAGE_EDGES_PER_NODE},       # budget = num of prm edges + num_of_landmarks (ratio 1:4)
+        # dRRT_star: {"num_landmarks": budget // 40, "prm_num_landmarks": 3 * budget // 4}  # budget = num of prm edges + num_of_landmarks * num_of_expands
     }[solver_class]
 
 
 def calc_budget(solver):
     if solver.roadmap is None:
         return float("Nan")
-    elif isinstance(solver, PRM):
+    else:
         return len(solver.roadmap.edges)
-    elif isinstance(solver, RRT):
-        return len(solver.roadmap.points)
-    elif isinstance(solver, dRRT_star):
-        return solver.num_landmarks * solver.num_expands + sum([len(roadmap.edges) for roadmap in solver.tensor_roadmap.roadmaps.values()]) / len(solver.tensor_roadmap.robots)
-    elif isinstance(solver, dRRT):
-        return solver.num_landmarks + sum([len(roadmap.edges) for roadmap in solver.tensor_roadmap.roadmaps.values()]) / len(solver.tensor_roadmap.robots)
+    # elif isinstance(solver, (PRM, RRT, RRT_star)):
+    #     return len(solver.roadmap.edges)
+    # elif isinstance(solver, dRRT_star):
+    #     return solver.num_landmarks * solver.num_expands + sum([len(roadmap.edges) for roadmap in solver.tensor_roadmap.roadmaps.values()]) / len(solver.tensor_roadmap.robots)
+    # elif isinstance(solver, dRRT):
+    #     return solver.num_landmarks + sum([len(roadmap.edges) for roadmap in solver.tensor_roadmap.roadmaps.values()]) / len(solver.tensor_roadmap.robots)
 
 
 def num_of_edges(solver):
