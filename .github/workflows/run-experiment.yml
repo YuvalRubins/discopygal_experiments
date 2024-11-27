@@ -95,7 +95,6 @@ jobs:
           with:
             name: scenarios_file
             path: ${{ steps.get-config.outputs.scenarios_file }}
-            retention-days: 7
 
 
     run-experiment-chunk:
@@ -140,7 +139,6 @@ jobs:
               with:
                 name: chunk_${{ matrix.chunk }}
                 path: ./results/chunk_${{ matrix.chunk }}
-                retention-days: 7  # Keep artifacts for 7 days
 
     sum_results:
         runs-on: ubuntu-latest
@@ -190,7 +188,6 @@ jobs:
               with:
                   name: results
                   path: ./results/
-                  retention-days: 7  # Keep artifacts for 7 days
 
             - name: Delete temporary chunk artifacts
               uses: geekyeggo/delete-artifact@v5
