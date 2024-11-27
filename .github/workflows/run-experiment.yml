@@ -10,7 +10,7 @@ on:
             experiment_config:
                 description: 'Configuration file of experiment to run'
                 required: true
-                default: 'exp_multi_alg/exp_config.json'
+                default: 'exp_multi_algs/exp_config.json'
         #     commit_sha:
         #         description: 'Commit SHA to run the experiment'
         #         required: true
