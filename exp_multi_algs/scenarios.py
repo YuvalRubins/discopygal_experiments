@@ -103,4 +103,4 @@ SCENARIOS = [Scenario(solver, scene, get_params(solver, budget))
              for solver, scene, budget in product([PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT, StaggeredGrid], scenes, budgets)]
 
 # RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
-RESULT_HANDLERS = {"num_of_nodes": lambda _, solver: num_of_points(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
+RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
