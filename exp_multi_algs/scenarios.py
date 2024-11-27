@@ -51,7 +51,6 @@ def get_params(solver_class, budget):
         dRRT_star: {"num_landmarks": budget // (10 * 10), "prm_num_landmarks": 5 * budget // (10 * 10)},
         LBT_RRT: {"num_landmarks": budget},
         BiRRT: {"num_landmarks": budget},
-        StaggeredGrid: {}
         # dRRT: {"num_landmarks": budget // 4, "prm_num_landmarks": 3 * budget // PRM_AVERAGE_EDGES_PER_NODE},       # budget = num of prm edges + num_of_landmarks (ratio 1:4)
         # dRRT_star: {"num_landmarks": budget // 40, "prm_num_landmarks": 3 * budget // 4}  # budget = num of prm edges + num_of_landmarks * num_of_expands
     }[solver_class]
@@ -100,7 +99,9 @@ scenes = [
 
 
 SCENARIOS = [Scenario(solver, scene, get_params(solver, budget))
-             for solver, scene, budget in product([PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT, StaggeredGrid], scenes, budgets)]
+             for solver, scene, budget in product([PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT], scenes, budgets)
+             ] + [Scenario(StaggeredGrid, scene, repetitions=1) for scene in scenes]
+
 
 # RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
 RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
