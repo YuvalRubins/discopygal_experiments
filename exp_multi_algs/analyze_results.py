@@ -1,12 +1,15 @@
 import os
+import sys
 import pandas as pd
 from functools import reduce
 from openpyxl.chart import ScatterChart, Reference, Series
 
-from scenarios import scenes
+from scenarios import scenes, ALGOS
 
-
-ALGOS = ["PRM", "RRT", "RRT_star", "dRRT", "dRRT_star"]
+try:
+    results_file_path = sys.argv[1]
+except IndexError:
+    print("Usage: python analyze_results.py <path_to_results_file>")
 
 
 def get_filename(path):
@@ -30,7 +33,7 @@ def get_Y_per_X(results_df, scene, solver_class, X, Y):
 
 def get_Y_per_X_all_algos(results_df, scene, X, Y):
     return reduce(lambda df1, df2: pd.merge(df1, df2, left_index=True ,right_index=True, how="outer"),
-                  [get_Y_per_X(results_df, scene, solver_class, X, Y)
+                  [get_Y_per_X(results_df, scene, solver_class.__name__, X, Y)
                    for solver_class in ALGOS])
 
 
@@ -42,11 +45,13 @@ def lengths_per_calc_time(results_df, scene):
     return get_Y_per_X_all_algos(results_df, scene, X="calc_time_avg", Y="total_path_length_avg")
 
 
-create_table_func = lengths_per_budget
-# create_table_func = lengths_per_calc_time
+# create_table_func = lengths_per_budget
+create_table_func = lengths_per_calc_time
 
-results_df = pd.read_csv("results.csv")
-with pd.ExcelWriter(f"summary_{create_table_func.__name__}.xlsx", engine="openpyxl") as writer:
+results_df = pd.read_csv(results_file_path)
+summary_file_path = f"{os.path.dirname(results_file_path)}/summary_{create_table_func.__name__}.xlsx"
+assert not os.path.exists(summary_file_path)
+with pd.ExcelWriter(summary_file_path, engine="openpyxl") as writer:
     for scene in scenes:
         create_table_func(results_df, scene).to_excel(writer, sheet_name=get_filename(scene))
         remove_style_from_worksheet(writer.sheets[get_filename(scene)])
