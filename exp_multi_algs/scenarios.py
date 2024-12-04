@@ -14,7 +14,7 @@ budgets = range(100, 10_000 + 1, 100)
 
 PRM_AVERAGE_EDGES_PER_NODE = 6
 # ALGOS = [PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT]
-ALGOS = [dRRT_star]
+ALGOS = [PRM]
 
 
 # def get_params(solver_class, budget):
@@ -102,7 +102,7 @@ scenes = [
 
 SCENARIOS = [Scenario(solver, scene, get_params(solver, budget))
              for solver, scene, budget in product(ALGOS, scenes, budgets)
-             ] + [Scenario(StaggeredGrid, scene, repetitions=1) for scene in scenes]
+             ] # + [Scenario(StaggeredGrid, scene, repetitions=1) for scene in scenes]
 
 
 # RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
