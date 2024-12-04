@@ -106,4 +106,4 @@ SCENARIOS = [Scenario(solver, scene, get_params(solver, budget))
 
 
 # RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
-RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
+RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver), "num_of_nodes": lambda _, solver: num_of_points(solver)}
