@@ -21,9 +21,8 @@ def add_missing_operations(scenario_count: dict, all_operations: list):
 
 
 def main():
-    scenarios_dir_path = sys.argv[1]
-
-    all_scenarios = pd.read_csv(f"{scenarios_dir_path}/all_scenarios.csv")
+    all_scenarios_dir_path = sys.argv[1]
+    all_scenarios = pd.read_csv(all_scenarios_dir_path)
 
     operations = eval(all_scenarios['operations_count'][0]).keys()
 
@@ -33,7 +32,7 @@ def main():
 
     weights = {operation: 1 for operation in operations}
     weights["ObjectCollisionDetection.is_point_valid"] = 1
-    print(weights)
+    # print(weights)
 
     operations_count['budget'] = sum([weights[operation] * operations_count[operation] for operation in operations])
 
