@@ -14,7 +14,7 @@ budgets = range(100, 10_000 + 1, 100)
 
 PRM_AVERAGE_EDGES_PER_NODE = 6
 # ALGOS = [PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT]
-ALGOS = [PRM]
+ALGOS = [dRRT_star]
 
 
 # def get_params(solver_class, budget):
@@ -106,7 +106,7 @@ SCENARIOS = [Scenario(solver, scene, get_params(solver, budget))
 
 
 # RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver), "num_of_edges": lambda _, solver: num_of_edges(solver)}
-RESULT_HANDLERS = {"budget": lambda _, solver: calc_budget(solver),
+RESULT_HANDLERS = {#"budget": lambda _, solver: calc_budget(solver),
                    "num_of_edges": lambda _, solver: num_of_edges(solver),
                    "num_of_nodes": lambda _, solver: num_of_points(solver),
                    "operations_count": lambda _, solver: str(solver.basic_operations_call_counts)}
