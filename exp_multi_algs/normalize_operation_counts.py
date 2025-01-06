@@ -1,43 +1,41 @@
 import sys
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr
 
 
-
-def plot_budget_by_time(time, budget):
-    plt.scatter(time, budget)
-    plt.xlabel('Time')
-    plt.ylabel('Budget')
+def plot(X, Y, x_name, y_name):
+    plt.scatter(X, Y)
+    plt.xlabel(x_name)
+    plt.ylabel(y_name)
     plt.show()
-
-
-def add_missing_operations(scenario_count: dict, all_operations: list):
-    for operation in all_operations:
-        if operation not in scenario_count:
-            scenario_count[operation] = 0
-
-    return pd.Series(scenario_count)
 
 
 def main():
     all_scenarios_dir_path = sys.argv[1]
     all_scenarios = pd.read_csv(all_scenarios_dir_path)
 
-    operations = eval(all_scenarios['operations_count'][0]).keys()
+    # operations = eval(all_scenarios['operations_count'][0]).keys()
 
-    operations_count = pd.DataFrame(columns=operations)
+    operations_count_dict = []
     for i in range(len(all_scenarios)):
-        operations_count.loc[i] = add_missing_operations(eval(all_scenarios['operations_count'][i]), operations)
+        # operations_count.loc[i] = add_missing_operations(eval(all_scenarios['operations_count'][i]), operations)
+        operations_count_dict.append(eval(all_scenarios['operations_count'][i]))
+    operations_count = pd.DataFrame.from_records(operations_count_dict)
+    operations_count = operations_count.fillna(0)
 
-    weights = {operation: 1 for operation in operations}
-    weights["ObjectCollisionDetection.is_point_valid"] = 1
+    weights = {operation: 1 for operation in operations_count.columns}
+    # weights["NearestNeighborsCached.k_nearest"] = 0
+    weights["NearestNeighbors_sklearn.k_nearest"] = 0
     # print(weights)
+    print("operation counts STDs: " + str({name: np.round(operations_count[name].std()) for name in operations_count.columns}))
 
-    operations_count['budget'] = sum([weights[operation] * operations_count[operation] for operation in operations])
+    operations_count['budget'] = sum([weights[operation] * operations_count[operation] for operation in operations_count.columns])
 
     print(f"Pearson correlation coefficient: {pearsonr(all_scenarios['calc_time'], operations_count['budget'])[0]}")
-    # plot_budget_by_time(all_scenarios['calc_time'], operations_count['budget'])
+    plot(all_scenarios['calc_time'], operations_count['budget'], 'calc_time', 'budget')
+    # plot(all_scenarios['calc_time'], operations_count['shortest_path_length'], 'calc_time', 'path_length')
 
 
 if __name__ == "__main__":
