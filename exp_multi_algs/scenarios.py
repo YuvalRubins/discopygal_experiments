@@ -11,7 +11,8 @@ from discopygal.solvers.staggered_grid import StaggeredGrid
 from discopygal.solvers.rrt.lbt_rrt import LBT_RRT
 from discopygal.solvers.rrt.birrt import BiRRT
 
-budgets = range(100, 10_000 + 1, 100)
+# budgets = range(100, 10_000 + 1, 100)
+budgets = range(100, 1_000 + 1, 100)
 
 PRM_AVERAGE_EDGES_PER_NODE = 6
 # ALGOS = [PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT]
