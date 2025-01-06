@@ -26,8 +26,6 @@ def main():
     operations_count = operations_count.fillna(0)
 
     weights = {operation: 1 for operation in operations_count.columns}
-    # weights["NearestNeighborsCached.k_nearest"] = 0
-    weights["NearestNeighbors_sklearn.k_nearest"] = 0
     # print(weights)
     print("operation counts STDs: " + str({name: np.round(operations_count[name].std()) for name in operations_count.columns}))
 
