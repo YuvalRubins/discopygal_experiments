@@ -111,5 +111,5 @@ RESULT_HANDLERS = {#"budget": lambda _, solver: calc_budget(solver),
                    "num_of_edges": lambda _, solver: num_of_edges(solver),
                    "num_of_nodes": lambda _, solver: num_of_points(solver),
                    "operations_count": lambda _, solver: str(solver.operations_counter.basic_operations_call_counts),
-                   "mean_time_to_inc_operation_ratio": lambda _, solver: str({k: np.mean(solver.operations_counter.time_to_increment_ratios[k]) for k in solver.operations_counter.time_to_increment_ratios}),
-                   "std_time_to_inc_operation_ratio": lambda _, solver: str({k: np.std(solver.operations_counter.time_to_increment_ratios[k]) for k in solver.operations_counter.time_to_increment_ratios})}
+                   "mean_time_to_inc_operation_ratio": lambda _, solver: str({k: float(np.mean(solver.operations_counter.time_to_increment_ratios[k])) for k in solver.operations_counter.time_to_increment_ratios}),
+                   "std_time_to_inc_operation_ratio": lambda _, solver: str({k: float(np.std(solver.operations_counter.time_to_increment_ratios[k])) for k in solver.operations_counter.time_to_increment_ratios})}
