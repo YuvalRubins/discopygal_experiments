@@ -20,4 +20,6 @@ for scenario_file in os.listdir(scenarios_dir_path):
     df = df[["scenario_index", "repetition"] + columns]
     dfs.append(df)
 
-pd.concat(dfs).to_csv(f"{scenarios_dir_path}/all_scenarios.csv", index=False)
+all_scenarios_df = pd.concat(dfs)
+all_scenarios_df = all_scenarios_df.sort_values(["scenario_index", "repetition"])
+all_scenarios_df.to_csv(f"{scenarios_dir_path}/all_scenarios.csv", index=False)
