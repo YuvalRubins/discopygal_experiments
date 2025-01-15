@@ -53,28 +53,38 @@ def plot_drrt_star(all_scenarios, results):
 
     weights = {operation: 1 for operation in operations_count.columns}
     # weights['set_intersection'] = 0
+    # weights['NearestNeighbors_sklearn.k_nearest'] = 0
     # weights['TensorRoadmap.cost'] = 0
-    # print(weights)
+    # weights['Metric_SumDist.dist'] = 0
+    # weights['shortest_path_length'] = 0
+    # weights['shortest_path'] = 0
+    # weights['has_path'] = 0
+    print(weights)
     print("operation counts STDs: " + str({name: np.round(operations_count[name].std()) for name in operations_count.columns}))
     operations_count['budget'] = sum([weights[operation] * operations_count[operation] for operation in operations_count.columns])
 
     print(f"Pearson correlation coefficient: {pearsonr(all_scenarios['calc_time'], operations_count['budget'])[0]}")
     plot(all_scenarios['calc_time'], operations_count['budget'], 'calc_time', 'budget', group_per_scenario)
 
-    plot(range(len(all_scenarios['calc_time'])), all_scenarios['calc_time'], 'scenario_index', 'calc_time', group_per_scenario)
-    plot(range(len(operations_count['budget'])), operations_count['budget'], 'scenario_index', 'budget', group_per_scenario)
-    plot(range(len(operations_count['budget'])), operations_count['budget'] / all_scenarios['calc_time'], 'scenario_index', 'budget_to_calc_time_ratio', group_per_scenario)
+    # plot(range(len(all_scenarios['calc_time'])), all_scenarios['calc_time'], 'scenario_index', 'calc_time', group_per_scenario)
+    # plot(range(len(operations_count['budget'])), operations_count['budget'], 'scenario_index', 'budget', group_per_scenario)
+    # plot(range(len(operations_count['budget'])), operations_count['budget'] / all_scenarios['calc_time'], 'scenario_index', 'budget_to_calc_time_ratio', group_per_scenario)
     for operation in mean_time_to_inc_operation_ratio.columns:
-        plot(range(len(mean_time_to_inc_operation_ratio[operation])), mean_time_to_inc_operation_ratio[operation], 'scenario_index', operation, scene_per_scenario)
-        # plot(operations_count[operation], mean_time_to_inc_operation_ratio[operation], f'{operation} count', 'mean_time_to_inc_operation_ratio', scene_per_scenario)
-        # plot(range(len(std_time_to_inc_operation_ratio[operation])), std_time_to_inc_operation_ratio[operation], 'scenario_index', operation, scene_per_scenario)
+        # plot(range(len(operations_count[operation])), operations_count[operation], 'scenario_index', f'{operation} count', group_per_scenario)
+        plot(range(len(mean_time_to_inc_operation_ratio[operation])), mean_time_to_inc_operation_ratio[operation], 'scenario_index', operation, group_per_scenario)
+        # plot(operations_count[operation], mean_time_to_inc_operation_ratio[operation], f'{operation} count', 'mean_time_to_inc_operation_ratio', group_per_scenario)
+        # plot(range(len(std_time_to_inc_operation_ratio[operation])), std_time_to_inc_operation_ratio[operation], 'scenario_index', operation, group_per_scenario)
         # plot(all_scenarios['calc_time'], operations_count[operation], 'calc_time', operation)
-    # plot(all_scenarios['calc_time'], operations_count['shortest_path_length'], 'calc_time', 'path_length')
+    plot(all_scenarios['calc_time'], all_scenarios['total_path_length'], 'calc_time', 'path_length', group_per_scenario)
+    plot(operations_count['budget'], all_scenarios['total_path_length'], 'budget', 'path_length', group_per_scenario)
 
 def plot_multi_algs(all_scenarios, results):
-    group_per_scenario = [results.loc[all_scenarios.loc[i, 'scenario_index'], 'solver_class'] for i in range(len(all_scenarios))]
-    plot(all_scenarios['calc_time'], all_scenarios['budget'], 'calc_time', 'budget', group_per_scenario)
-    plot(range(len(all_scenarios['budget'])), all_scenarios['budget'] / all_scenarios['calc_time'], 'scenario_index', 'budget_to_calc_time_ratio', group_per_scenario)
+    # group_per_scenario = [results.loc[all_scenarios.loc[i, 'scenario_index'], 'solver_class'] for i in range(len(all_scenarios))]
+    group_per_scenario = [results.loc[all_scenarios.loc[i, 'scenario_index'], 'scene_path'] for i in range(len(all_scenarios))]
+    # plot(all_scenarios['calc_time'], all_scenarios['budget'], 'calc_time', 'budget', group_per_scenario)
+    # plot(range(len(all_scenarios['budget'])), all_scenarios['budget'] / all_scenarios['calc_time'], 'scenario_index', 'budget_to_calc_time_ratio', group_per_scenario)
+    plot(all_scenarios['calc_time'], all_scenarios['total_path_length'], 'calc_time', 'path_length', group_per_scenario)
+    plot(all_scenarios['budget'], all_scenarios['total_path_length'], 'budget', 'path_length', group_per_scenario)
     plt.show()
 
 
@@ -83,8 +93,8 @@ def main():
     all_scenarios = pd.read_csv(f"{results_dir_path}/all_scenarios.csv")
     results = pd.read_csv(f"{results_dir_path}/results.csv")
 
-    plot_multi_algs(all_scenarios, results)
-    # plot_drrt_star(all_scenarios, results)
+    # plot_multi_algs(all_scenarios, results)
+    plot_drrt_star(all_scenarios, results)
 
     plt.show()
 
