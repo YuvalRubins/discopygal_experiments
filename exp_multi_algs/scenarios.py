@@ -14,8 +14,8 @@ from discopygal.solvers.rrt.birrt import BiRRT
 budgets = range(100, 10_000 + 1, 100)
 
 PRM_AVERAGE_EDGES_PER_NODE = 6
-# ALGOS = [PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT]
-ALGOS = [dRRT_star]
+ALGOS = [PRM, RRT, RRT_star, dRRT, dRRT_star, LBT_RRT, BiRRT]
+# ALGOS = [dRRT_star]
 
 
 # def get_params(solver_class, budget):
