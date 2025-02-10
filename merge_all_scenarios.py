@@ -22,4 +22,10 @@ for scenario_file in os.listdir(scenarios_dir_path):
 
 all_scenarios_df = pd.concat(dfs)
 all_scenarios_df = all_scenarios_df.sort_values(["scenario_index", "repetition"])
+
+results_df = pd.read_csv(f"{scenarios_dir_path}/results.csv")
+
+all_scenarios_df = all_scenarios_df.merge(results_df, on="scenario_index")
+all_scenarios_df = all_scenarios_df[['scenario_index', 'repetition',
+                                     'solver_class', 'parameters', 'full_parameters', 'scene_path', 'time_limit'] + columns]
 all_scenarios_df.to_csv(f"{scenarios_dir_path}/all_scenarios.csv", index=False)

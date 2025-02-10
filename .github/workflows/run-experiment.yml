@@ -183,6 +183,9 @@ jobs:
                        python deshuffle_results.py ${{ needs.startup-config.outputs.original_scenarios_file }} results
                    fi
 
+            - name: Merge all scenarios results
+              run: python merge_all_scenarios.py results/all_ordered/$(ls -1 results/all_ordered | head -n 1)/
+
             - name: Re-upload Updated Results
               uses: actions/upload-artifact@v4
               with:
