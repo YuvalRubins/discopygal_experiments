@@ -35,10 +35,10 @@ jobs:
           run: |
                 chmod +x bringmann_calc_frechet_distance
 
-        # - name: Run Experiment Script
-        #   run: python compare_frechets.py
+        - name: Run Experiment Script
+          run: python compare_frechets.py
 
-        # - name: Upload CSV Files as Artifact
-        #   uses: actions/upload-artifact@v4
-        #   with:
-        #     path: ./frechet_comparison.csv
+        - name: Upload CSV Files as Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            path: ./frechet_comparison.csv
