@@ -166,7 +166,7 @@ def main():
             for _ in range(REPETITIONS):
                 case_results.loc[len(case_results)] = run_func(func, big_curve_1, big_curve_2)
             print(case_results)
-            case_results.dropna()
+            case_results = case_results.dropna().astype("float")
             if len(case_results) == 0:
                 result = (func_name, float("NaN"), float("NaN"), float("NaN"), float("NaN"))
             else:
