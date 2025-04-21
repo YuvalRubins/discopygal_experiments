@@ -8,6 +8,7 @@ import urllib3
 from functools import partial
 import pandas as pd
 import psutil
+import multiprocessing
 
 from frechetlib.continuous_frechet import frechet_c_approx
 import frechetlib.frechet_utils as fu
@@ -140,11 +141,19 @@ FUNCTIONS = {
              }
 
 
-def run_func(func, curve_1, curve_2):
+def run_func(func, curve_1, curve_2, output_queue):
     start_time = time.perf_counter()
     frechet_dist = func(curve_1, curve_2)
     calc_time = time.perf_counter() - start_time
-    return frechet_dist, calc_time
+    output_queue.put([frechet_dist, calc_time])
+
+
+def run_func_process(func, curve_1, curve_2):
+    output_queue = multiprocessing.Queue()
+    process = multiprocessing.Process(target=run_func, args=(func, curve_1, curve_2, output_queue))
+    process.start()
+    process.join()
+    return output_queue.get()
 
 
 def print_mem_usage():
@@ -164,7 +173,7 @@ def main():
         for func_name, func in FUNCTIONS.items():
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
             for _ in range(REPETITIONS):
-                case_results.loc[len(case_results)] = run_func(func, big_curve_1, big_curve_2)
+                case_results.loc[len(case_results)] = run_func_process(func, big_curve_1, big_curve_2)
             print(case_results)
             case_results = case_results.astype("float").dropna()
             if len(case_results) == 0:
@@ -172,7 +181,7 @@ def main():
             else:
                 result = (func_name, *case_results.mean(), *case_results.std())
 
-            print("{} -  Frechet dist: {}, calc time (s): {}".format(*result))
+            print("{} -  Frechet dist: {}, calc time (s): {}".format(*result), flush=True)
             results.loc[len(results)] = (i,) + result
         # print(results.tail(len(FUNCTIONS)))
         print_mem_usage()
