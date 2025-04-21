@@ -153,7 +153,7 @@ def run_func_process(func, curve_1, curve_2):
     process = threading.Thread(target=run_func, args=(func, curve_1, curve_2, return_values))
     process.start()
     process.join()
-    return output_queue.get(block=False)
+    return return_values
 
 
 def print_mem_usage():
