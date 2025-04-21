@@ -130,12 +130,12 @@ class CustomFrechetPaths(FrechetMatching):
 FUNCTIONS = {
              "Har Peled": run_frechetlib_har_peled,
              "Bringmann": run_freceht_bringmann,
-             "Bottleneck Tree (landmarks=50, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.25),
-             "Bottleneck Tree (landmarks=75, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=75, radius=0.25),
-             "Bottleneck Tree (landmarks=100, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=100, radius=0.25),
-             "Bottleneck Tree (landmarks=50, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.5),
-             "Bottleneck Tree (landmarks=200, radius=0.1)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
-             "Bottleneck Tree (landmarks=200, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5)
+            #  "Bottleneck Tree (landmarks=50, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.25),
+            #  "Bottleneck Tree (landmarks=75, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=75, radius=0.25),
+            #  "Bottleneck Tree (landmarks=100, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=100, radius=0.25),
+            #  "Bottleneck Tree (landmarks=50, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.5),
+            #  "Bottleneck Tree (landmarks=200, radius=0.1)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
+            #  "Bottleneck Tree (landmarks=200, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5)
              }
 
 
@@ -147,7 +147,7 @@ def run_func(func, curve_1, curve_2):
 
 
 def main():
-    results = pd.DataFrame(columns=["Curve number", "Method", "Frechet distance", "calc time (s)"])
+    results = pd.DataFrame(columns=["Curve number", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
     for i in set(range(0, 16)).difference({11}):
         print(f"\n**************** Curve {i} ********************")
         big_curve_1 = get_curve(i, 0)
@@ -159,7 +159,7 @@ def main():
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
             for _ in range(REPETITIONS):
                 case_results.loc[len(case_results)] = run_func(func, big_curve_1, big_curve_2)
-            result = (func_name, *case_results.mean())
+            result = (func_name, *case_results.mean(), *case_results.std())
 
             print("{} -  Frechet dist: {}, calc time (s): {}".format(*result))
             results.loc[len(results)] = (i,) + result
