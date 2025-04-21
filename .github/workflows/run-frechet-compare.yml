@@ -1,4 +1,4 @@
-name: Run Experiment
+name: Run Frechet comparison
 
 env:
   PYTHON_VERSION: 3.11.9
