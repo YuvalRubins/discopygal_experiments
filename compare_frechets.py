@@ -83,7 +83,7 @@ def run_freceht_bringmann(path1, path2):
     with open("path2.txt", "w") as f:
         f.writelines([f"{path2[i][0]} {path2[i][1]}\n" for i in range(path2.shape[0])])
 
-    output = subprocess.check_output(["wsl", "/home/yuval/cgl_projects/frechet_distance-bringmann/build/calc_frechet_distance", "path1.txt", "path2.txt"])
+    output = subprocess.check_output(["./bringmann_calc_frechet_distance", "path1.txt", "path2.txt"])
     frechet_dist = float(re.search(b": (\d+\.\d*)", output).group(1))
 
     os.remove("path1.txt")
