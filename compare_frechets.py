@@ -162,6 +162,9 @@ def main():
             result = (func_name, *case_results.mean(), *case_results.std())
 
             print("{} -  Frechet dist: {}, calc time (s): {}".format(*result))
+            import psutil
+            memory_info = psutil.virtual_memory()
+            print(f"Memory Usage: {memory_info.percent}% ({memory_info.used / (1024 ** 2):.2f} MB used)", flush=True)
             results.loc[len(results)] = (i,) + result
         # print(results.tail(len(FUNCTIONS)))
 
