@@ -7,6 +7,7 @@ import itertools as it
 import urllib3
 from functools import partial
 import pandas as pd
+import psutil
 
 from frechetlib.continuous_frechet import frechet_c_approx
 import frechetlib.frechet_utils as fu
@@ -146,6 +147,11 @@ def run_func(func, curve_1, curve_2):
     return frechet_dist, calc_time
 
 
+def print_mem_usage():
+    memory_info = psutil.virtual_memory()
+    print(f"Memory Usage: {memory_info.percent}% ({memory_info.used / (1024 ** 2):.2f} MB used)", flush=True)
+
+
 def main():
     results = pd.DataFrame(columns=["Curve number", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
     for i in set(range(0, 16)).difference({11}):
@@ -159,14 +165,13 @@ def main():
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
             for _ in range(REPETITIONS):
                 case_results.loc[len(case_results)] = run_func(func, big_curve_1, big_curve_2)
+            print(case_results)
             result = (func_name, *case_results.mean(), *case_results.std())
 
             print("{} -  Frechet dist: {}, calc time (s): {}".format(*result))
-            import psutil
-            memory_info = psutil.virtual_memory()
-            print(f"Memory Usage: {memory_info.percent}% ({memory_info.used / (1024 ** 2):.2f} MB used)", flush=True)
             results.loc[len(results)] = (i,) + result
         # print(results.tail(len(FUNCTIONS)))
+        print_mem_usage()
 
     results.to_csv("frechet_comparison.csv", index=False)
 
