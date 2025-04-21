@@ -8,7 +8,7 @@ import urllib3
 from functools import partial
 import pandas as pd
 import psutil
-import multiprocessing
+import threading
 
 from frechetlib.continuous_frechet import frechet_c_approx
 import frechetlib.frechet_utils as fu
@@ -141,19 +141,19 @@ FUNCTIONS = {
              }
 
 
-def run_func(func, curve_1, curve_2, output_queue):
+def run_func(func, curve_1, curve_2, return_values: list):
     start_time = time.perf_counter()
     frechet_dist = func(curve_1, curve_2)
     calc_time = time.perf_counter() - start_time
-    output_queue.put([frechet_dist, calc_time])
+    return_values.extend([frechet_dist, calc_time])
 
 
 def run_func_process(func, curve_1, curve_2):
-    output_queue = multiprocessing.Queue()
-    process = multiprocessing.Process(target=run_func, args=(func, curve_1, curve_2, output_queue))
+    return_values = []
+    process = threading.Thread(target=run_func, args=(func, curve_1, curve_2, return_values))
     process.start()
     process.join()
-    return output_queue.get()
+    return output_queue.get(block=False)
 
 
 def print_mem_usage():
