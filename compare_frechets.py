@@ -163,7 +163,7 @@ def print_mem_usage():
 
 def main():
     results = pd.DataFrame(columns=["Curve number", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
-    for i in set(range(9, 16)).difference({11}):
+    for i in set(range(1, 9)).difference({11}):
         print(f"\n**************** Curve {i} ********************")
         big_curve_1 = get_curve(i, 0)
         big_curve_2 = get_curve(i, 1)
