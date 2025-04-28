@@ -11,7 +11,7 @@ jobs:
     run-experiment:
       runs-on: ubuntu-latest
 
-    strategy:
+      strategy:
         matrix:
           num: [2,3,4,5,6,7,8,9,10]
 
