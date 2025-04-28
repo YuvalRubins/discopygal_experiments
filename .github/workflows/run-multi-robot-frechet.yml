@@ -34,7 +34,7 @@ jobs:
           run: pip install -v *.whl
 
         - name: Run Experiment Script
-          run: python multi_robot_frecehts.py ${{ matrix.num }}
+          run: python frechet_distance/multi_robot_frechets.py ${{ matrix.num }}
 
         - name: Upload CSV Files as Artifact
           uses: actions/upload-artifact@v4

@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 from functools import partial
 import pandas as pd
@@ -53,7 +54,7 @@ def get_paths(number_of_paths):
 
 def main():
     results = pd.DataFrame(columns=["Number of robots", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
-    for num_of_robots in range(2, 11):
+    for num_of_robots in [int(sys.argv[1])]:
         landmarks = 200 * num_of_robots
         func_name = f"Bottleneck Tree (landmarks={landmarks}, radius=0.5)"
         func = partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=landmarks, radius=0.5)
