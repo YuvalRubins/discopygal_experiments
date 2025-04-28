@@ -32,8 +32,8 @@ jobs:
 
         - name: Install Discopygal
           run: |
-                pip install urllib3
-                pip install -v *.whl
+              pip install -v *.whl
+              pip install frechetlib
 
         - name: Run Experiment Script
           run: python frechet_distance/multi_robot_frechets.py ${{ matrix.num }}
