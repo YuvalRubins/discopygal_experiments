@@ -46,6 +46,7 @@ FACTOR = 15
 PATHS = [get_curve(0, 0), get_curve(0, 1), np.array([[-16, 0], [16, 0]], dtype=np.float64),
          FACTOR * get_curve(3, 0), FACTOR * get_curve(3, 1), FACTOR * get_curve(10, 0), FACTOR * get_curve(10, 1),
          FACTOR * get_curve(15, 0), FACTOR * get_curve(15, 1), FACTOR * get_curve(13, 0), FACTOR * get_curve(13, 1)]
+LANDMARKS_PER_NUM = {2: 200, 3: 400, 4: 600, 5: 800, 6: 1500, 7: 2000, 8: 2000, 9: 5000, 10: 10000}
 
 
 def get_paths(number_of_paths):
@@ -55,7 +56,7 @@ def get_paths(number_of_paths):
 def main():
     results = pd.DataFrame(columns=["Number of robots", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
     for num_of_robots in [int(sys.argv[1])]:
-        landmarks = 200 * num_of_robots
+        landmarks = LANDMARKS_PER_NUM[num_of_robots]
         func_name = f"Bottleneck Tree (landmarks={landmarks}, radius=0.5)"
         func = partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=landmarks, radius=0.5)
         print(f"\n**************** {num_of_robots=} ********************")
