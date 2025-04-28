@@ -31,7 +31,9 @@ jobs:
               key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
 
         - name: Install Discopygal
-          run: pip install -v *.whl
+          run: |
+                pip install urllib3
+                pip install -v *.whl
 
         - name: Run Experiment Script
           run: python frechet_distance/multi_robot_frechets.py ${{ matrix.num }}
