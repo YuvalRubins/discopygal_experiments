@@ -1,4 +1,5 @@
 import sys
+import time
 import numpy as np
 from functools import partial
 import pandas as pd
@@ -8,7 +9,7 @@ from discopygal.solvers_infra import Path, PathCollection, RobotDisc, Scene
 from discopygal.solvers.bottleneck_tree.frechet_matching import FrechetMatching
 from discopygal.solvers_infra.metrics import Metric_Euclidean
 from discopygal_tools.solver_viewer import start_gui
-from compare_frechets import get_curve, print_mem_usage
+from compare_frechets import get_curve, print_mem_usage, run_func
 from discopygal.gui.color import PREDEFINED_COLORS
 
 
@@ -35,18 +36,20 @@ class CustomFrechetPaths(FrechetMatching):
         solver = CustomFrechetPaths.init_solver(robots=robots, paths=paths, verbose=True, **kwargs)
 
         # start_gui(scene, solver)
+        start_time = time.perf_counter()
         path_collection = solver.solve(scene)
+        calc_time = time.perf_counter() - start_time
 
         if path_collection.is_empty():
             return float("NaN")
 
-        return solver.calc_frechet_distance(path_collection)[2]
+        return solver.calc_frechet_distance(path_collection)[2], calc_time
 
 FACTOR = 15
 PATHS = [get_curve(0, 0), get_curve(0, 1), np.array([[-16, 0], [16, 0]], dtype=np.float64),
          FACTOR * get_curve(3, 0), FACTOR * get_curve(3, 1), FACTOR * get_curve(10, 0), FACTOR * get_curve(10, 1),
          FACTOR * get_curve(15, 0), FACTOR * get_curve(15, 1), FACTOR * get_curve(13, 0), FACTOR * get_curve(13, 1)]
-LANDMARKS_PER_NUM = {2: 200, 3: 400, 4: 600, 5: 800, 6: 3000, 7: 10_000, 8: 10_000, 9: 20_000, 10: 20_000}
+LANDMARKS_PER_NUM = {2: 200, 3: 400, 4: 600, 5: 800, 6: 3000, 7: 10_000, 8: 10_000, 9: 20_000, 10: 30_000}
 RADIUS_PER_NUM = {2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.7, 7: 0.75, 8: 0.75, 9: 0.75, 10: 0.75}
 
 
