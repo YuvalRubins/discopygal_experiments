@@ -1,4 +1,4 @@
-name: Run Frechet comparison
+name: Run Multi-robot Frechet comparison
 
 env:
   PYTHON_VERSION: 3.11.9
