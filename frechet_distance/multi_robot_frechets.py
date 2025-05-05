@@ -49,8 +49,8 @@ FACTOR = 15
 PATHS = [get_curve(0, 0), get_curve(0, 1), np.array([[-16, 0], [16, 0]], dtype=np.float64),
          FACTOR * get_curve(3, 0), FACTOR * get_curve(3, 1), FACTOR * get_curve(10, 0), FACTOR * get_curve(10, 1),
          FACTOR * get_curve(15, 0), FACTOR * get_curve(15, 1), FACTOR * get_curve(13, 0), FACTOR * get_curve(13, 1)]
-LANDMARKS_PER_NUM = {2: 100, 3: 200, 4: 300, 5: 600, 6: 3000, 7: 10_000, 8: 10_000, 9: 20_000, 10: 30_000}
-RADIUS_PER_NUM = {2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.7, 7: 0.75, 8: 0.75, 9: 0.75, 10: 0.75}
+LANDMARKS_PER_NUM = {2: 100, 3: 200, 4: 300, 5: 750, 6: 3000, 7: 8_000, 8: 10_000, 9: 15_000, 10: 30_000}
+RADIUS_PER_NUM = {2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.7, 7: 0.7, 8: 0.7, 9: 0.7, 10: 0.9}
 
 
 def get_paths(number_of_paths):
