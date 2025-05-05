@@ -13,7 +13,7 @@ from compare_frechets import get_curve, print_mem_usage, run_func
 from discopygal.gui.color import PREDEFINED_COLORS
 
 
-REPETITIONS = 5
+REPETITIONS = 10
 
 
 class CustomFrechetPaths(FrechetMatching):
@@ -49,7 +49,7 @@ FACTOR = 15
 PATHS = [get_curve(0, 0), get_curve(0, 1), np.array([[-16, 0], [16, 0]], dtype=np.float64),
          FACTOR * get_curve(3, 0), FACTOR * get_curve(3, 1), FACTOR * get_curve(10, 0), FACTOR * get_curve(10, 1),
          FACTOR * get_curve(15, 0), FACTOR * get_curve(15, 1), FACTOR * get_curve(13, 0), FACTOR * get_curve(13, 1)]
-LANDMARKS_PER_NUM = {2: 200, 3: 400, 4: 600, 5: 800, 6: 3000, 7: 10_000, 8: 10_000, 9: 20_000, 10: 30_000}
+LANDMARKS_PER_NUM = {2: 100, 3: 200, 4: 300, 5: 600, 6: 3000, 7: 10_000, 8: 10_000, 9: 20_000, 10: 30_000}
 RADIUS_PER_NUM = {2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.7, 7: 0.75, 8: 0.75, 9: 0.75, 10: 0.75}
 
 
@@ -68,7 +68,7 @@ def main():
         case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
         for _ in range(REPETITIONS):
             case_results.loc[len(case_results)] = func(get_paths(num_of_robots))
-        print(case_results)
+            print(case_results)
         case_results = case_results.astype("float").dropna()
         if len(case_results) == 0:
             result = (func_name, float("NaN"), float("NaN"), float("NaN"), float("NaN"))
