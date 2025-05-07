@@ -8,9 +8,9 @@ from discopygal.bindings import Point_2, FT
 from discopygal.solvers_infra import Path, PathCollection, RobotDisc, Scene
 from discopygal.solvers.bottleneck_tree.frechet_matching import FrechetMatching
 from discopygal.solvers_infra.metrics import Metric_Euclidean
-from discopygal_tools.solver_viewer import start_gui
-from compare_frechets import get_curve, print_mem_usage, run_func
 from discopygal.gui.color import PREDEFINED_COLORS
+from discopygal_tools.solver_viewer import start_gui
+from compare_frechets import get_curve, print_mem_usage
 
 
 REPETITIONS = 10
@@ -49,8 +49,8 @@ FACTOR = 15
 PATHS = [get_curve(0, 0), get_curve(0, 1), np.array([[-16, 0], [16, 0]], dtype=np.float64),
          FACTOR * get_curve(3, 0), FACTOR * get_curve(3, 1), FACTOR * get_curve(10, 0), FACTOR * get_curve(10, 1),
          FACTOR * get_curve(15, 0), FACTOR * get_curve(15, 1), FACTOR * get_curve(13, 0), FACTOR * get_curve(13, 1)]
-LANDMARKS_PER_NUM = {2: 100, 3: 200, 4: 300, 5: 750, 6: 3000, 7: 8_000, 8: 10_000, 9: 15_000, 10: 30_000}
-RADIUS_PER_NUM = {2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.7, 7: 0.7, 8: 0.7, 9: 0.7, 10: 0.9}
+LANDMARKS_PER_NUM = {2: 100, 3: 200, 4: 300, 5: 750, 6: 3000, 7: 7_000, 8: 8_000, 9: 15_000, 10: 30_000}
+RADIUS_PER_NUM = {2: 0.5, 3: 0.5, 4: 0.5, 5: 0.5, 6: 0.7, 7: 0.7, 8: 0.7, 9: 0.75, 10: 0.9}
 
 
 def get_paths(number_of_paths):
@@ -69,6 +69,7 @@ def main():
         for _ in range(REPETITIONS):
             case_results.loc[len(case_results)] = func(get_paths(num_of_robots))
             print(case_results)
+            print_mem_usage()
         case_results = case_results.astype("float").dropna()
         if len(case_results) == 0:
             result = (func_name, float("NaN"), float("NaN"), float("NaN"), float("NaN"))
@@ -77,7 +78,6 @@ def main():
 
         print("{} -  Frechet dist: {}, calc time (s): {}".format(*result), flush=True)
         results.loc[len(results)] = (num_of_robots,) + result
-        print_mem_usage()
 
     results.to_csv("multi_robot_frechet_comparison.csv", index=False)
 
