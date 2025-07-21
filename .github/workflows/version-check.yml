@@ -23,7 +23,17 @@ jobs:
               python-version: ${{ matrix.python-version }}
 
         - name: Install test dependencies
-          run: pip install pytest pyautogui networkx
+          run: |
+                pip install --upgrade pip setuptools wheel scikit-build-core
+                pip install pytest pyautogui networkx
+
+
+        - name: Set compiler variables (macOS)
+          if: runner.os == 'macOS'
+          run: |
+                echo "Setting compiler env vars"
+                echo "CC=clang" >> $GITHUB_ENV
+                echo "CXX=clang++" >> $GITHUB_ENV
 
         - name: Install Discopygal
           if: runner.os != 'Windows'
@@ -37,5 +47,10 @@ jobs:
                 }
 
         - name: Run tests
+          if: runner.os != 'Windows'
           run: xvfb-run -a pytest -v ./tests
+
+        - name: Run tests (Windows)
+          if: runner.os == 'Windows'
+          run: pytest -v ./tests
 
