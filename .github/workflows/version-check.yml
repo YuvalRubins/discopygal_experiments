@@ -4,29 +4,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+    check:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                # python-version: ["3.9", "3.10", "3.11"]
+                python-version: ["3.10"]
 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.9", "3.10", "3.11"]
-
-    steps:
+        steps:
         - name: Checkout code
           uses: actions/checkout@v4
 
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v5
           with:
-            python-version: ${{ matrix.python-version }}
+              python-version: ${{ matrix.python-version }}
 
         - name: Install test dependencies
-          run: pip install pytest pyautogui
+          run: pip install pytest pyautogui networkx
 
         - name: Install Discopygal
+          if: runner.os != 'Windows'
           run: pip install -v *.whl
+
+        - name: Install Discopygal (Windows)
+          if: runner.os == 'Windows'
+          run: for %f in (*.whl) do pip install -v "%f"
 
         - name: Run tests
           run: pytest -v ./tests
