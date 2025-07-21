@@ -31,8 +31,11 @@ jobs:
 
         - name: Install Discopygal (Windows)
           if: runner.os == 'Windows'
-          run: for %f in (*.whl) do pip install -v "%f"
+          run: |
+                Get-ChildItem -Filter *.whl | ForEach-Object {
+                    pip install -v $_.FullName
+                }
 
         - name: Run tests
-          run: pytest -v ./tests
+          run: xvfb-run -a pytest -v ./tests
 
