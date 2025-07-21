@@ -46,7 +46,14 @@ def plot(X, Y, x_name, y_name, labels=None, title=None, labels_filter: callable 
     else:
         colors = None
 
-    plt.scatter(X, Y, color=colors, alpha=0.25)
+    if len(X) > 10_000:
+        size = 0.5
+        alpha = 1
+    else:
+        size = None
+        alpha = 0.25
+
+    plt.scatter(X, Y, s=size, color=colors, alpha=alpha)
     plt.xlabel(x_name)
     plt.ylabel(y_name)
     if title:
@@ -79,6 +86,7 @@ def get_expected_budget(row):
         "BiRRT": lambda params: params["num_landmarks"],
         "StaggeredGrid": lambda params: 0
     }[algorithm](parameters)
+
 
 def plot_drrt_star(all_scenarios):
     group_per_scenario = [os.path.basename(all_scenarios.loc[i, 'scene_path']) for i in range(len(all_scenarios))]
@@ -141,15 +149,15 @@ def plot_multi_algs(all_scenarios):
     # plot_per_key("calc_time", "total_path_length", scenarios_per_alg)
     # plot_per_key("budget", "total_path_length", scenarios_per_alg)
 
-
     # plot(all_scenarios['calc_time'], all_scenarios['budget'], 'calc_time', 'budget', alg_per_scenario, title="Budget by Calculation time", labels_filter=lambda s: s != "StaggeredGrid")
-    # plot(all_scenarios['budget'], all_scenarios['calc_time'], 'budget', 'calc_time', alg_per_scenario, title="Calculation time by Budget", labels_filter=lambda s: s != "StaggeredGrid")
+    plot(all_scenarios['budget'], all_scenarios['calc_time'], 'budget', 'calc_time', alg_per_scenario, title="Calculation time by Budget", labels_filter=lambda s: s != "StaggeredGrid")
     # plot(all_scenarios['calc_time'], all_scenarios['budget'], 'calc_time', 'budget', alg_per_scenario, labels_filter=lambda s: s not in ["LBT_RRT", "dRRT_star"])
 
     # plot(range(len(all_scenarios['budget'])), all_scenarios['budget'] / all_scenarios['calc_time'], 'scenario_index', 'budget_to_calc_time_ratio', alg_per_scenario)
     # plot(all_scenarios['calc_time'], all_scenarios['total_path_length'], 'calc_time', 'path_length', alg_per_scenario)
     # plot(all_scenarios['budget'], all_scenarios['total_path_length'], 'budget', 'path_length', alg_per_scenario)
-    plot(all_scenarios['budget'], all_scenarios['total_path_length_ratio_to_staggered_grid'], 'budget', 'path_length_ratio', alg_per_scenario)
+    plot(all_scenarios['budget'], all_scenarios['total_path_length_ratio_to_staggered_grid'], 'budget', 'path_length_ratio', alg_per_scenario, labels_filter=lambda s: s != "StaggeredGrid")
+    # plot(all_scenarios['calc_time'], all_scenarios['total_path_length_ratio_to_staggered_grid'], 'calc_time', 'path_length_ratio', alg_per_scenario, labels_filter=lambda s: s != "StaggeredGrid")
     # plot(all_scenarios['calc_time'], all_scenarios['total_path_length'], 'calc_time', 'path_length', alg_per_scenario, labels_filter=lambda s: s == "StaggeredGrid")
 
     # for operation in mean_time_to_inc_operation_ratio.columns:
