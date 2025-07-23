@@ -2,6 +2,7 @@ name: Version release
 
 env:
   PYTHON_VERSION: 3.12.3
+  GCC_MAJOR_VERSION: 12
 
 on:
   workflow_dispatch:
@@ -23,10 +24,10 @@ jobs:
           with:
             python-version: ${{ env.PYTHON_VERSION }}
 
-        - name: Install GCC 11
+        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
           run: |
                 sudo apt update
-                sudo apt install -y gcc-11 g++-11
+                sudo apt install -y gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
@@ -34,19 +35,12 @@ jobs:
         - name: Preparing requirements
           run: |
                 pip install pipenv
-                CC=gcc-11 CXX=g++-11 pipenv install --dev --verbose
-                pipenv shell
+                CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --dev --verbose
           working-directory: ./discopygal
-
-        - name: Print log file if main step failed
-          if: failure()  # runs only if any previous step failed
-          run: |
-                echo "=== Printing error Pipfile.lock ==="
-                cat discopygal/Pipfile.lock
 
         - name: Build package
           run: |
-                python scripts/build_package.py
+                pipenv run scripts/build_package.py
                 echo "package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
           working-directory: ./discopygal
 
