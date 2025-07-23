@@ -10,6 +10,10 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+
+        outputs:
+            package_whl_file: ${{ steps.build_package.outputs.package_whl_file }}
+
         steps:
         - name: Checkout code
           uses: actions/checkout@v4
@@ -30,13 +34,24 @@ jobs:
           working-directory: ./discopygal
 
         - name: Build package
-          run: python scripts/build_package.py
+          run: |
+                python scripts/build_package.py
+                echo "package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
           working-directory: ./discopygal
 
         - name: Upload Discopygal whl
           uses: actions/upload-artifact@v4
           with:
             path: discopygal/dist/*
+
+        - name: Build docs
+          run: sphinx-multiversion . "_build/multiver/html/docs/"
+          working-directory: ./discopygal/docs
+
+        - name: Upload docs
+          uses: actions/upload-artifact@v4
+          with:
+            path: discopygal/docs/_build/multiver/html
 
     check:
         runs-on: ${{ matrix.os }}
@@ -61,6 +76,12 @@ jobs:
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
+        - name: Download discopygal whl
+          uses: actions/download-artifact@v4
+          with:
+              name: ${{ needs.build.outputs.package_whl_file }}
+              path: discopygal/${{ needs.build.outputs.package_whl_file }}
+
         - name: Install test dependencies
           run: |
                 pip install --upgrade pip setuptools wheel scikit-build-core
@@ -75,21 +96,12 @@ jobs:
                 echo "CXX=clang++" >> $GITHUB_ENV
 
         - name: Install Discopygal
-          if: runner.os != 'Windows'
-          run: pip install -v *.whl
-
-        - name: Install Discopygal (Windows)
-          if: runner.os == 'Windows'
-          run: |
-                Get-ChildItem -Filter *.whl | ForEach-Object {
-                    pip install -v $_.FullName
-                }
+          run: pip install -v ${{ needs.build.outputs.package_whl_file }}
 
         - name: Run tests
           if: runner.os != 'Windows'
           run: xvfb-run -a pytest -v ./tests
           working-directory: ./discopygal
-
 
         - name: Run tests (Windows)
           if: runner.os == 'Windows'
