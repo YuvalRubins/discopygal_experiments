@@ -45,12 +45,11 @@ jobs:
                 echo "package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
           working-directory: ./discopygal
 
-        - name: Upload Discopygal whl
+        - name: Upload Discopygal package
           uses: actions/upload-artifact@v4
           with:
-            path: |
-                   discopygal/dist/*.whl
-                   discopygal/dist/*.gz
+            name: package
+            path: discopygal/dist/
 
         # - name: Build docs
         #   run: |
@@ -89,14 +88,13 @@ jobs:
         - name: Download discopygal whl
           uses: actions/download-artifact@v4
           with:
-              name: ${{ needs.build.outputs.package_whl_file }}
-              path: discopygal/${{ needs.build.outputs.package_whl_file }}
+              name: package
 
         - name: Install test dependencies
           run: pip install pytest pyautogui
 
         - name: Install Discopygal
-          run: pip install -v ${{ needs.build.outputs.package_whl_file }}
+          run: pip install -v package/${{ needs.build.outputs.package_whl_file }}
 
         # - name: Run tests
         #   if: runner.os != 'Windows'
