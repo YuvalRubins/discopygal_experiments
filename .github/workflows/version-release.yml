@@ -111,7 +111,6 @@ jobs:
 
                       [conf]
                       tools.build:cxxflags=-isysroot $SDK_PATH
-                      tools.build:cppflags=-isysroot $SDK_PATH
                       """ > ~/.conan2/profiles/default
 
         - name: Clone discopygal
