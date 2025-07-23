@@ -24,7 +24,6 @@ jobs:
 
         - name: Preparing requirements
           run: |
-                rm Pipfile.lock
                 pip install pipenv
                 pipenv install --dev --verbose
                 pipenv shell
