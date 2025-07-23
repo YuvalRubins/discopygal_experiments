@@ -125,9 +125,12 @@ jobs:
           # run: pip install -v ${{ needs.build.outputs.package_whl_file }}
           run: pip install -v discopygal_taucgl-1.4.1-py3-none-any.whl
 
+        - name: print conan profile
+          if: failure()
+          run: cat ~/.conan2/profiles/default
+
         - name: Install test dependencies
           run: pip install pytest pyautogui networkx
-
 
         # - name: Run tests
         #   if: runner.os != 'Windows'
