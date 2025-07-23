@@ -20,12 +20,12 @@ jobs:
             python-version: ${{ env.PYTHON_VERSION }}
 
         - name: Clone discopygal
-          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+          run: |
+               git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+               cd discopygal
 
         - name: Build package
-          run: |
-               cd discopygal
-               python script/build_package.py
+          run: python scripts/build_package.py
 
         - name: Upload Discopygal whl
           uses: actions/upload-artifact@v4
@@ -51,6 +51,11 @@ jobs:
           uses: actions/setup-python@v5
           with:
               python-version: ${{ matrix.python-version }}
+
+        - name: Clone discopygal
+          run: |
+               git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+               cd discopygal
 
         - name: Install test dependencies
           run: |
