@@ -66,7 +66,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [ubuntu-latest, windows-latest, macos-latest]
+                # os: [ubuntu-latest, windows-latest, macos-latest]
+                os: [macos-latest]
                 # os: [ubuntu-latest]
                 python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
                 # python-version: ["3.10"]
@@ -90,7 +91,7 @@ jobs:
         - name: Set compiler for macOS
           if: runner.os == 'macOS'
           run:  |
-                  xcode-select --install
+                  # xcode-select --install
                   sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
                   export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
                   echo "SDK_PATH=$SDK_PATH"
