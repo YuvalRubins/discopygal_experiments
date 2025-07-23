@@ -91,10 +91,7 @@ jobs:
               name: package
 
         - name: Install Discopygal
-          run: |
-                ls
-                ls package
-                pip install -v package/${{ needs.build.outputs.package_whl_file }}
+          run: pip install -v ${{ needs.build.outputs.package_whl_file }}
 
         - name: Install test dependencies
           run: pip install pytest pyautogui
