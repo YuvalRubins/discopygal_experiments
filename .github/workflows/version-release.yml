@@ -25,9 +25,7 @@ jobs:
             python-version: ${{ env.PYTHON_VERSION }}
 
         - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
-          run: |
-                sudo apt update
-                sudo apt install -y gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+          run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
@@ -68,10 +66,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # os: [ubuntu-latest, windows-latest, macos-latest]
-                os: [ubuntu-latest]
-                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-                python-version: ["3.10"]
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                # os: [ubuntu-latest]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                # python-version: ["3.10"]
 
         steps:
         - name: Checkout code
@@ -83,11 +81,9 @@ jobs:
               python-version: ${{ matrix.python-version }}
 
         - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
-          run: |
-                sudo apt update
-                sudo apt install -y gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+          run:  sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
                 export CC=gcc-${{ env.GCC_MAJOR_VERSION }}
-                export C++=g++-${{ env.GCC_MAJOR_VERSION }}
+                export CXX=g++-${{ env.GCC_MAJOR_VERSION }}
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
