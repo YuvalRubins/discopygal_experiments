@@ -115,6 +115,7 @@ jobs:
                        [conf]
                        tools.apple:sdk_path=$SDK_PATH
                        tools.build:sysroot=$SDK_PATH
+                       tools.build:cxxflags=["-arch", "arm64"]
                        """ > ~/.conan2/profiles/default
 
         - name: Clone discopygal
