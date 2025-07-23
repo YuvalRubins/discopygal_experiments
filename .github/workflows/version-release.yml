@@ -39,7 +39,7 @@ jobs:
                 export CC=gcc-11
                 export CXX=g++-11
                 pip install pipenv
-                pipenv install --dev --verbose
+                CC=gcc-11 CXX=g++-11 pipenv install --dev --verbose
                 pipenv shell
           working-directory: ./discopygal
 
