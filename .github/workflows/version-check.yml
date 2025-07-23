@@ -20,7 +20,7 @@ jobs:
             python-version: ${{ env.PYTHON_VERSION }}
 
         - name: Clone discopygal
-          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com:TAU-CGL/discopygal.git
+          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
         - name: Build package
           run: python sc
