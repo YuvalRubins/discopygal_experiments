@@ -105,14 +105,15 @@ jobs:
                        os=Macos
                        arch=armv8
                        compiler=apple-clang
-                        compiler.cppstd=gnu17
+                       compiler.cppstd=gnu17
                        compiler.version=15
                        compiler.libcxx=libc++
                        build_type=Release
 
                        [conf]
-                       tools.build:cxxflags=[\"-isysroot\", \"$SDK_PATH\"]
+                       tools.apple:sdk_path=
                        """ > ~/.conan2/profiles/default
+                      #  tools.build:cxxflags=[\"-isysroot\", \"$SDK_PATH\"]
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
