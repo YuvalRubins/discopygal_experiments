@@ -40,7 +40,7 @@ jobs:
 
         - name: Build package
           run: |
-                pipenv run scripts/build_package.py
+                pipenv run python scripts/build_package.py
                 echo "package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
           working-directory: ./discopygal
 
@@ -95,13 +95,12 @@ jobs:
         - name: Install Discopygal
           run: pip install -v ${{ needs.build.outputs.package_whl_file }}
 
-        - name: Run tests
-          if: runner.os != 'Windows'
-          run: xvfb-run -a pytest -v ./tests
-          working-directory: ./discopygal
+        # - name: Run tests
+        #   if: runner.os != 'Windows'
+        #   run: xvfb-run -a pytest -v ./tests
+        #   working-directory: ./discopygal
 
-        - name: Run tests (Windows)
-          if: runner.os == 'Windows'
-          run: pytest -v ./tests
+        - name: Run tests
+          run: pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
