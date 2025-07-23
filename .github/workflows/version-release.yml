@@ -96,8 +96,11 @@ jobs:
                   export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
                   echo "SDK_PATH=$SDK_PATH"
                   echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
+                  echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
                   echo "CC=clang" >> $GITHUB_ENV
                   echo "CXX=clang++" >> $GITHUB_ENV
+                  echo "tools.build:cxxflags=-isysroot $SDK_PATH" >> ~/.conan2/profiles/default
+                  echo "tools.build:cppflags=-isysroot $SDK_PATH" >> ~/.conan2/profiles/default
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
