@@ -1,1 +1,0 @@
-{"__class__": "Scene", "obstacles": [{"__class__": "ObstaclePolygon", "poly": [[-5.0, -2.0], [-2.0, -4.0], [2.0, -5.0], [7.0, 0.0], [-1.0, 1.0]], "data": {"color": "", "name": "", "value": "", "details": ""}}], "robots": [], "metadata": {"version": "1.0.1"}}

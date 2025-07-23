@@ -1,7 +1,7 @@
 name: Version release
 
 env:
-  PYTHON_VERSION: 3.11.9
+  PYTHON_VERSION: 3.12.3
 
 on:
   workflow_dispatch:
@@ -27,21 +27,22 @@ jobs:
           run: |
                 sudo apt update
                 sudo apt install -y gcc-11 g++-11
-                sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
-                sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
-
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
         - name: Preparing requirements
           run: |
-                export CC=gcc-11
-                export CXX=g++-11
                 pip install pipenv
                 CC=gcc-11 CXX=g++-11 pipenv install --dev --verbose
                 pipenv shell
           working-directory: ./discopygal
+
+        - name: Print log file if main step failed
+          if: failure()  # runs only if any previous step failed
+          run: |
+                echo "=== Printing error Pipfile.lock ==="
+                cat discopygal/Pipfile.lock
 
         - name: Build package
           run: |
@@ -54,14 +55,16 @@ jobs:
           with:
             path: discopygal/dist/*
 
-        - name: Build docs
-          run: sphinx-multiversion . "_build/multiver/html/docs/"
-          working-directory: ./discopygal/docs
+        # - name: Build docs
+        #   run: |
+        #         sudo apt install texlive-latex-extra dvipng
+        #         bash ./make_multiversion_docs.bat
+        #   working-directory: ./discopygal/docs
 
-        - name: Upload docs
-          uses: actions/upload-artifact@v4
-          with:
-            path: discopygal/docs/_build/multiver/html
+        # - name: Upload docs
+        #   uses: actions/upload-artifact@v4
+        #   with:
+        #     path: discopygal/docs/_build/multiver/html
 
     check:
         runs-on: ${{ matrix.os }}
@@ -71,7 +74,7 @@ jobs:
             matrix:
                 # os: [ubuntu-latest, windows-latest, macos-latest]
                 os: [ubuntu-latest]
-                # python-version: ["3.9", "3.10", "3.11"]
+                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
                 python-version: ["3.10"]
 
         steps:
@@ -93,17 +96,7 @@ jobs:
               path: discopygal/${{ needs.build.outputs.package_whl_file }}
 
         - name: Install test dependencies
-          run: |
-                pip install --upgrade pip setuptools wheel scikit-build-core
-                pip install pytest pyautogui networkx
-
-
-        - name: Set compiler variables (macOS)
-          if: runner.os == 'macOS'
-          run: |
-                echo "Setting compiler env vars"
-                echo "CC=clang" >> $GITHUB_ENV
-                echo "CXX=clang++" >> $GITHUB_ENV
+          run: pip install pytest pyautogui
 
         - name: Install Discopygal
           run: pip install -v ${{ needs.build.outputs.package_whl_file }}
@@ -116,4 +109,5 @@ jobs:
         - name: Run tests (Windows)
           if: runner.os == 'Windows'
           run: pytest -v ./tests
+          working-directory: ./discopygal
 
