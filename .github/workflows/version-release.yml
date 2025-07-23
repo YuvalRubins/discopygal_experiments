@@ -99,6 +99,7 @@ jobs:
                   echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
                   echo "CC=clang" >> $GITHUB_ENV
                   echo "CXX=clang++" >> $GITHUB_ENV
+                  mkdir -p ~/.conan2/profiles
                   echo "tools.build:cxxflags=-isysroot $SDK_PATH" > ~/.conan2/profiles/default
                   echo "tools.build:cppflags=-isysroot $SDK_PATH" >> ~/.conan2/profiles/default
 
