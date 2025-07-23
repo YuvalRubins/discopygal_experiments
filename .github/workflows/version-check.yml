@@ -22,11 +22,11 @@ jobs:
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-        - name: Install requirements
+        - name: Preparing requirements
           run: |
                 rm Pipfile.lock
                 pip install pipenv
-                pipenv install --dev
+                pipenv install --dev --verbose
                 pipenv shell
           working-directory: ./discopygal
 
