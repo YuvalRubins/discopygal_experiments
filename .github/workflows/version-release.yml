@@ -81,6 +81,7 @@ jobs:
               python-version: ${{ matrix.python-version }}
 
         - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+          if: runner.os == 'Linux'
           run:  |
                  sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
                  export CC=gcc-${{ env.GCC_MAJOR_VERSION }}
@@ -95,6 +96,9 @@ jobs:
               name: package
 
         - name: Install Discopygal
+          env:
+            CC: gcc-${{ env.GCC_MAJOR_VERSION }}
+            CXX: g++-${{ env.GCC_MAJOR_VERSION }}
           run: pip install -v ${{ needs.build.outputs.package_whl_file }}
 
         - name: Install test dependencies
