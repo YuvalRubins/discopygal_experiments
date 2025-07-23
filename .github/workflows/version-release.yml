@@ -97,6 +97,7 @@ jobs:
                   echo "SDK_PATH=$SDK_PATH"
                   echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
                   echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
+                  echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
                   echo "CC=clang" >> $GITHUB_ENV
                   echo "CXX=clang++" >> $GITHUB_ENV
                    mkdir -p ~/.conan2/profiles
@@ -111,7 +112,8 @@ jobs:
                        build_type=Release
 
                        [conf]
-                       tools.apple:sdk_path=
+                       tools.apple:sdk_path=$SDK_PATH
+                       tools.build:sysroot=$SDK_PATH
                        """ > ~/.conan2/profiles/default
                       #  tools.build:cxxflags=[\"-isysroot\", \"$SDK_PATH\"]
 
