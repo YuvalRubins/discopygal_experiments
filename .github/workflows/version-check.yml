@@ -1,4 +1,4 @@
-name: Check version release
+name: Version release
 
 env:
   PYTHON_VERSION: 3.11.9
@@ -24,6 +24,7 @@ jobs:
 
         - name: Install requirements
           run: |
+                rm Pipfile.lock
                 pip install pipenv
                 pipenv install --dev
                 pipenv shell
