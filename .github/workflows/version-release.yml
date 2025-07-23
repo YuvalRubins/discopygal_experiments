@@ -9,45 +9,45 @@ on:
 
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+    # build:
+    #     runs-on: ubuntu-latest
 
-        outputs:
-            package_whl_file: ${{ steps.build_package.outputs.package_whl_file }}
+    #     outputs:
+    #         package_whl_file: ${{ steps.build_package.outputs.package_whl_file }}
 
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+    #     steps:
+    #     - name: Checkout code
+    #       uses: actions/checkout@v4
 
-        - name: Set up Python
-          uses: actions/setup-python@v5
-          with:
-            python-version: ${{ env.PYTHON_VERSION }}
+    #     - name: Set up Python
+    #       uses: actions/setup-python@v5
+    #       with:
+    #         python-version: ${{ env.PYTHON_VERSION }}
 
-        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
-          run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+    #     - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+    #       run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
 
-        - name: Clone discopygal
-          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+    #     - name: Clone discopygal
+    #       run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-        - name: Preparing requirements
-          run: |
-                pip install pipenv
-                CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --dev --verbose
-          working-directory: ./discopygal
+    #     - name: Preparing requirements
+    #       run: |
+    #             pip install pipenv
+    #             CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --dev --verbose
+    #       working-directory: ./discopygal
 
-        - name: Build package
-          id: build_package
-          run: |
-                pipenv run python scripts/build_package.py
-                echo "package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
-          working-directory: ./discopygal
+    #     - name: Build package
+    #       id: build_package
+    #       run: |
+    #             pipenv run python scripts/build_package.py
+    #             echo "package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
+    #       working-directory: ./discopygal
 
-        - name: Upload Discopygal package
-          uses: actions/upload-artifact@v4
-          with:
-            name: package
-            path: discopygal/dist/
+    #     - name: Upload Discopygal package
+    #       uses: actions/upload-artifact@v4
+    #       with:
+    #         name: package
+    #         path: discopygal/dist/
 
         # - name: Build docs
         #   run: |
@@ -62,7 +62,7 @@ jobs:
 
     check:
         runs-on: ${{ matrix.os }}
-        needs: build
+        # needs: build
         strategy:
             fail-fast: false
             matrix:
@@ -117,13 +117,14 @@ jobs:
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-        - name: Download discopygal whl
-          uses: actions/download-artifact@v4
-          with:
-              name: package
+        # - name: Download discopygal whl
+        #   uses: actions/download-artifact@v4
+        #   with:
+        #       name: package
 
         - name: Install Discopygal
-          run: pip install -v ${{ needs.build.outputs.package_whl_file }}
+          # run: pip install -v ${{ needs.build.outputs.package_whl_file }}
+          run: pip install -v discopygal_taucgl-1.4.1-py3-none-any.whl
 
         - name: Install test dependencies
           run: pip install pytest pyautogui networkx
