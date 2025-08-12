@@ -69,8 +69,8 @@ jobs:
                 # os: [ubuntu-latest, windows-latest, macos-latest]
                 os: [macos-latest]
                 # os: [ubuntu-latest]
-                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-                # python-version: ["3.10"]
+                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                python-version: ["3.10"]
 
         steps:
         - name: Checkout code
@@ -116,6 +116,10 @@ jobs:
                        [conf]
                        tools.apple:sdk_path=$SDK_PATH
                        tools.build:sysroot=$SDK_PATH
+
+                       [options]
+                       boost:without_locale=True
+                       boost:without_stacktrace_backtrace=True
                        """ > ~/.conan2/profiles/default
                       #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
                       #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
