@@ -107,6 +107,7 @@ jobs:
                        [settings]
                        os=Macos
                        arch=armv8
+                       os.arch=armv8
                        compiler=apple-clang
                        compiler.cppstd=gnu17
                        compiler.version=15
