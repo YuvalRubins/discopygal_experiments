@@ -106,7 +106,7 @@ jobs:
                   echo """
                        [settings]
                        os=Macos
-                       arch=armv8
+                       arch=x86_64
                        compiler=apple-clang
                        compiler.cppstd=gnu17
                        compiler.version=15
@@ -116,9 +116,9 @@ jobs:
                        [conf]
                        tools.apple:sdk_path=$SDK_PATH
                        tools.build:sysroot=$SDK_PATH
-                       tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
-                       tools.build:exelinkflags=[\"-arch\", \"arm64\"]
                        """ > ~/.conan2/profiles/default
+                      #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
+                      #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
                        #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
 
         - name: Clone discopygal
