@@ -118,8 +118,8 @@ jobs:
                        tools.build:sysroot=$SDK_PATH
 
                        [options]
-                       boost:without_locale=True
-                       boost:without_stacktrace_backtrace=True
+                       boost/*:without_locale=True
+                       boost/*:without_stacktrace_backtrace=True
                        """ > ~/.conan2/profiles/default
                       #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
                       #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
