@@ -137,7 +137,7 @@ jobs:
         - name: Install Discopygal
           # run: pip install -v ${{ needs.build.outputs.package_whl_file }}
           # run: pip install -v discopygal_taucgl-1.4.1-py3-none-any.whl
-          run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings@50604fb00a7aa50d0cadb21336046c5b85cd7ca1 --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON --config-settings=cmake.define.CMAKE_OSX_ARCHITECTURES=arm64
+          run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings@62480f015b2ee5d2fa992fa8aee248a4f9cc9926 --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON --config-settings=cmake.define.CMAKE_OSX_ARCHITECTURES=arm64
 
         - name: print conan profile
           if: failure()
