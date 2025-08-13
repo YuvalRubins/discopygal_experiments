@@ -116,6 +116,9 @@ jobs:
                        compiler.libcxx=libc++
                        build_type=Release
 
+                       [general]
+                       request_timeout = 300
+
                        [conf]
                        tools.apple:sdk_path=$SDK_PATH
                        tools.build:sysroot=$SDK_PATH
