@@ -1,0 +1,58 @@
+name: Compile docs
+
+env:
+  PYTHON_VERSION: 3.11
+  GCC_MAJOR_VERSION: 12
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      # needs: build
+      strategy:
+          fail-fast: false
+          matrix:
+              tag: [1.4.1]
+
+    #     outputs:
+    #         package_whl_file: ${{ steps.build_package.outputs.package_whl_file }}
+
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: ${{ env.PYTHON_VERSION }}
+
+        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+          run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+
+        - name: Clone discopygal
+          run: git clone --branch ${{ matrix.tag }} --depth 1 https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+
+        - name: Preparing requirements
+          run: |
+                pip install pipenv
+                CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --dev --verbose
+          working-directory: ./discopygal
+
+        - name: Install Revolving Areas
+          run: pip install ra-1.0.0-cp311-cp311-linux_x86_64.whl
+
+        - name: Build docs
+          run: |
+                sudo apt install texlive-latex-extra dvipng
+                make clean
+                make html
+          working-directory: ./discopygal/docs
+
+        - name: Upload docs
+          uses: actions/upload-artifact@v4
+          with:
+            path: discopygal/docs/_build/html
+
