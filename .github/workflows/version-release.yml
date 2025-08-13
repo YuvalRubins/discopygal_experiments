@@ -93,6 +93,7 @@ jobs:
         - name: Set compiler for macOS
           if: runner.os == 'macOS'
           run:  |
+                  pip install pyqt5
                   # xcode-select --install
                   echo `uname -m`
                   sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
