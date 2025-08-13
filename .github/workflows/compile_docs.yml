@@ -3,6 +3,7 @@ name: Compile docs
 env:
   PYTHON_VERSION: 3.11
   GCC_MAJOR_VERSION: 12
+  CONAN_REQUEST_TIMEOUT: 300
 
 on:
   workflow_dispatch:
