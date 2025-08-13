@@ -15,10 +15,7 @@ jobs:
       strategy:
           fail-fast: false
           matrix:
-              tag: [1.4.1]
-
-    #     outputs:
-    #         package_whl_file: ${{ steps.build_package.outputs.package_whl_file }}
+              tag: [1_4_1]
 
       steps:
         - name: Checkout code
@@ -33,7 +30,7 @@ jobs:
           run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
 
         - name: Clone discopygal
-          run: git clone --branch ${{ matrix.tag }} --depth 1 https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+          run: git clone --branch discopygal_${{ matrix.tag }} --depth 1 https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
         - name: Preparing requirements
           run: |
