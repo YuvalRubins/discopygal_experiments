@@ -35,11 +35,18 @@ jobs:
         - name: Preparing requirements
           run: |
                 pip install pipenv
+                sed -i '/pyqt5designer = "*"/d' Pipfile # Remove bad dependency for linux
                 CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --dev --verbose
           working-directory: ./discopygal
 
         - name: Install Revolving Areas
           run: pip install ra-1.0.0-cp311-cp311-linux_x86_64.whl
+
+        - name: Set updated template
+          run: |
+                rm -rf discopygal/docs/_templates
+                mkdir discopygal/docs/_templates
+                cp docs_layout.html discopygal/docs/_templates/layout.html
 
         - name: Build docs
           run: |
