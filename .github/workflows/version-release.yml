@@ -107,7 +107,7 @@ jobs:
                   echo """
                        [settings]
                        os=Macos
-                       arch=arm64
+                       arch=arm64ec
                        compiler=apple-clang
                        compiler.cppstd=gnu17
                        compiler.version=15
