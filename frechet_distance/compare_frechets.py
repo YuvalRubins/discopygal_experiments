@@ -10,6 +10,8 @@ import pandas as pd
 import psutil
 import threading
 import sys
+import multiprocessing
+import dill
 
 from frechetlib.continuous_frechet import frechet_c_approx
 import frechetlib.frechet_utils as fu
@@ -153,17 +155,36 @@ def run_func(func, curve_1, curve_2, return_values: list):
     return_values.extend([frechet_dist, calc_time])
 
 
-def run_func_process(func, curve_1, curve_2):
-    return_values = []
-    process = threading.Thread(target=run_func, args=(func, curve_1, curve_2, return_values))
-    process.start()
-    process.join()
-    return return_values
+# def run_func_process(func, curve_1, curve_2):
+#     return_values = []
+#     process = threading.Thread(target=run_func, args=(func, curve_1, curve_2, return_values))
+#     process.start()
+#     process.join()
+#     return return_values
 
 
 def print_mem_usage():
     memory_info = psutil.virtual_memory()
     print(f"Memory Usage: {memory_info.percent}% ({memory_info.used / (1024 ** 2):.2f} MB used)", flush=True)
+
+
+def run_func_process(input_queue: multiprocessing.Queue, output_queue: multiprocessing.Queue):
+    run_func = input_queue.get()
+    args = input_queue.get()
+    results = run_func(*args)
+    output_queue.put(results)
+
+
+def create_run_func_process(run_func, *args):
+    input_queue = multiprocessing.Queue()
+    output_queue = multiprocessing.Queue()
+    input_queue.put(run_func)
+    input_queue.put(args)
+    process = multiprocessing.Process(target=run_func_process, args=(input_queue, output_queue))
+    process.start()
+    process.join()
+    results = output_queue.get(block=False)
+    return results
 
 
 def main():
@@ -186,7 +207,7 @@ def main():
             print_mem_usage()
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
             for _ in range(REPETITIONS):
-                case_results.loc[len(case_results)] = run_func_process(func, big_curve_1, big_curve_2)
+                case_results.loc[len(case_results)] = create_run_func_process(func, big_curve_1, big_curve_2)
             print(case_results)
             case_results = case_results.astype("float").dropna()
             if len(case_results) == 0:

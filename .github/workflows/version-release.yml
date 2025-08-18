@@ -159,6 +159,7 @@ jobs:
         - name: Run tests
           run: |
                 brew install boost
+                export DYLD_LIBRARY_PATH=/opt/homebrew/Cellar/boost/1.88.0/lib:$DYLD_LIBRARY_PATH
                 pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
