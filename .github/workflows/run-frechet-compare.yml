@@ -1,7 +1,7 @@
 name: Run Frechet comparison
 
 env:
-  PYTHON_VERSION: 3.12
+  PYTHON_VERSION: 3.11
   GCC_MAJOR_VERSION: 12
   MAX_JOBS: 256 # Max amount of jobs is 256
 
@@ -27,11 +27,17 @@ jobs:
                  echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
                  echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
 
-        - name: Cache Python packages
+        - name: Cache Conan
           uses: actions/cache@v4
           with:
-              path: ~/.cache/pip
-              key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
+            path: ~/.conan2
+            key: ${{ runner.os }}-conan-${{ hashFiles('**/discopygal*.whl') }}
+
+        - name: Cache pip
+          uses: actions/cache@v4
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
 
         - name: Install Discopygal
           run: pip install -v discopygal*.whl
@@ -55,11 +61,17 @@ jobs:
           with:
             python-version: ${{ env.PYTHON_VERSION }}
 
-        - name: Cache Python packages
+        - name: Cache Conan
           uses: actions/cache@v4
           with:
-              path: ~/.cache/pip
-              key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
+            path: ~/.conan2
+            key: ${{ runner.os }}-conan-${{ hashFiles('**/discopygal*.whl') }}
+
+        - name: Cache pip
+          uses: actions/cache@v4
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
 
         - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
           run:  |
