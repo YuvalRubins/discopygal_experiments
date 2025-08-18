@@ -51,6 +51,7 @@ jobs:
 
         - name: Build docs
           run: |
+                pip install sphinx
                 sudo apt install texlive-latex-extra dvipng
                 make clean
                 make html
