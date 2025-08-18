@@ -9,6 +9,7 @@ from functools import partial
 import pandas as pd
 import psutil
 import threading
+import sys
 
 from frechetlib.continuous_frechet import frechet_c_approx
 import frechetlib.frechet_utils as fu
@@ -25,7 +26,9 @@ REPETITIONS = 5
 
 def get_curve_file(curve_file):
     base_url = "https://sarielhp.org/p/24/frechet_ve/examples"
-    contents = urllib3.request("get", f"{base_url}/{curve_file}").data.decode("utf-8")
+    curve_url = f"{base_url}/{curve_file}"
+    print(curve_url)
+    contents = urllib3.request("get", curve_url).data.decode("utf-8")
 
     lines = contents.split("\n")[:-1]
     x_coords = [float(line.split(',')[0]) for line in lines]
@@ -65,7 +68,7 @@ def get_curve(curve_number, robot_number):
     if curve_number == 0:
         return alternating_heights_curves()[robot_number]
     else:
-        return get_curve_file(f"{curve_number:02}/poly_{'a' if robot_number == 0 else 'b'}.txt")
+        return get_curve_file(f"{str(curve_number).rjust(2, '0')}/poly_{'a' if robot_number == 0 else 'b'}.txt")
 
 
 def run_frechetlib_har_peled(path1, path2):
@@ -163,13 +166,20 @@ def print_mem_usage():
 
 
 def main():
+    try:
+        scenes_to_run = set(sys.argv[1])
+    except IndexError:
+        scenes_to_run = set(range(0, 16)).difference({11})
+
+    did_init_har_peled = False
     results = pd.DataFrame(columns=["Curve number", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
-    for i in set(range(0, 16)).difference({11}):
+    for i in scenes_to_run:
         print(f"\n**************** Curve {i} ********************")
         big_curve_1 = get_curve(i, 0)
         big_curve_2 = get_curve(i, 1)
-        if i == 0:
+        if not did_init_har_peled:
             run_frechetlib_har_peled(big_curve_1, big_curve_2)
+            did_init_har_peled = True
 
         for func_name, func in FUNCTIONS.items():
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
