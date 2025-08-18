@@ -40,8 +40,9 @@ jobs:
             key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
 
         - name: Install Discopygal
-          run: pip install -v discopygal*.whl
-
+          run: |
+                  pip install -v discopygal*.whl
+                  pip install frechetlib
 
     run-experiment:
       runs-on: ubuntu-latest
