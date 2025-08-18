@@ -183,6 +183,7 @@ def main():
             did_init_har_peled = True
 
         for func_name, func in FUNCTIONS.items():
+            print_mem_usage()
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
             for _ in range(REPETITIONS):
                 case_results.loc[len(case_results)] = run_func_process(func, big_curve_1, big_curve_2)
@@ -196,7 +197,6 @@ def main():
             print("{} -  Frechet dist: {}, calc time (s): {}".format(*result), flush=True)
             results.loc[len(results)] = (i,) + result
         # print(results.tail(len(FUNCTIONS)))
-        print_mem_usage()
 
     results.to_csv("frechet_comparison.csv", index=False)
 
