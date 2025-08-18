@@ -107,6 +107,7 @@ jobs:
                   echo "CONAN_DOWNLOAD_TIMEOUT=300" >> $GITHUB_ENV
                   echo "CC=clang" >> $GITHUB_ENV
                   echo "CXX=clang++" >> $GITHUB_ENV
+                  echo DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH" >> $GITHUB_ENV
                   mkdir -p ~/.conan2/profiles
                   echo """
                        [settings]
