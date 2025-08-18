@@ -24,10 +24,10 @@ jobs:
           uses: actions/cache@v4
           with:
               path: ~/.cache/pip
-              key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
+              key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
 
         - name: Install Discopygal
-          run: pip install -v *.whl
+          run: pip install -v discopygal*.whl
 
 
     run-experiment:
@@ -51,11 +51,11 @@ jobs:
           uses: actions/cache@v4
           with:
               path: ~/.cache/pip
-              key: ${{ runner.os }}-pip-${{ hashFiles('**/*.whl') }}
+              key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
 
         - name: Install Discopygal
           run: |
-                  pip install -v *.whl
+                  pip install -v discopygal*.whl
                   pip install frechetlib
 
         - name: Build Bringmann frechet
