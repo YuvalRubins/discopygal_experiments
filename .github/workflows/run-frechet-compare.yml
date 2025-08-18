@@ -2,6 +2,7 @@ name: Run Frechet comparison
 
 env:
   PYTHON_VERSION: 3.12
+  GCC_MAJOR_VERSION: 12
   MAX_JOBS: 256 # Max amount of jobs is 256
 
 on:
@@ -19,6 +20,12 @@ jobs:
           uses: actions/setup-python@v5
           with:
             python-version: ${{ env.PYTHON_VERSION }}
+
+        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+          run:  |
+                 sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+                 echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+                 echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
 
         - name: Cache Python packages
           uses: actions/cache@v4
@@ -53,6 +60,12 @@ jobs:
           with:
               path: ~/.cache/pip
               key: ${{ runner.os }}-pip-${{ hashFiles('**/discopygal*.whl') }}
+
+        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+          run:  |
+                 sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+                 echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+                 echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
 
         - name: Install Discopygal
           run: |
