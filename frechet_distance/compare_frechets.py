@@ -79,7 +79,7 @@ def run_frechetlib_har_peled(path1, path2):
     # NOTE Run twice to factor out the compilation time from the timing.
     # frechet_c_approx(path1, path2, 1.01)
 
-    res, morphing = frechet_c_approx(path1, path2, 1.0001)
+    res, morphing = frechet_c_approx(path1, path2, 1.01)
 
     return morphing.dist
 
@@ -173,8 +173,8 @@ def run_func_process(input_queue: multiprocessing.Queue, output_queue: multiproc
     args = input_queue.get()
     results = []
     run_func(func, *args, results)
-    print(results)
-    output_queue.put(dill.dumps(results))
+    results[0] = float(results[0])
+    output_queue.put(results)
     output_queue.close()
     output_queue.join_thread()
 
@@ -187,7 +187,7 @@ def create_run_func_process(run_func, *args):
     process = multiprocessing.Process(target=run_func_process, args=(input_queue, output_queue))
     process.start()
     process.join()
-    results = dill.loads(output_queue.get(block=True))
+    results = output_queue.get(block=False)
     return results
 
 
