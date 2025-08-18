@@ -167,7 +167,7 @@ def print_mem_usage():
 
 def main():
     try:
-        scenes_to_run = set(int(sys.argv[1]))
+        scenes_to_run = {int(sys.argv[1])}
     except IndexError:
         scenes_to_run = set(range(0, 16)).difference({11})
 
