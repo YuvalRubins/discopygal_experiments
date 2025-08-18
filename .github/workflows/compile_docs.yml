@@ -42,7 +42,7 @@ jobs:
           working-directory: ./discopygal
 
         - name: Install Revolving Areas
-          run: pipenv install ra-1.0.0-cp311-cp311-linux_x86_64.whl
+          run: pipenv run pip install ra-1.0.0-cp311-cp311-linux_x86_64.whl
           working-directory: ./discopygal
 
         - name: Set updated template
