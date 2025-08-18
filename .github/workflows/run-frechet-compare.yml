@@ -98,5 +98,5 @@ jobs:
         - name: Upload CSV Files as Artifact
           uses: actions/upload-artifact@v4
           with:
-            name: ./frechet_comparison_${{ matrix.scene }}.csv
+            name: frechet_comparison_${{ matrix.scene }}.csv
             path: ./frechet_comparison.csv
