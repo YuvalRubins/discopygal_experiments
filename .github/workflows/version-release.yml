@@ -158,7 +158,7 @@ jobs:
 
         - name: Run tests
           run: |
-                ls/Users/runner/.conan/data/boost/*/_/_/package/*/lib
+                ls /Users/runner/.conan/data/boost/*/_/_/package/*/lib
                 pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
