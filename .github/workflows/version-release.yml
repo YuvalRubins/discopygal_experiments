@@ -158,7 +158,7 @@ jobs:
 
         - name: Run tests
           run: |
-                find / -name boost
+                find / -name boost*.dylib
                 pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
