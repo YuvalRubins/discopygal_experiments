@@ -169,10 +169,14 @@ def print_mem_usage():
 
 
 def run_func_process(input_queue: multiprocessing.Queue, output_queue: multiprocessing.Queue):
-    run_func = input_queue.get()
+    func = input_queue.get()
     args = input_queue.get()
-    results = run_func(*args)
-    output_queue.put(results)
+    results = []
+    run_func(func, *args, results)
+    print(results)
+    output_queue.put(dill.dumps(results))
+    output_queue.close()
+    output_queue.join_thread()
 
 
 def create_run_func_process(run_func, *args):
@@ -183,7 +187,7 @@ def create_run_func_process(run_func, *args):
     process = multiprocessing.Process(target=run_func_process, args=(input_queue, output_queue))
     process.start()
     process.join()
-    results = output_queue.get(block=False)
+    results = dill.loads(output_queue.get(block=True))
     return results
 
 
