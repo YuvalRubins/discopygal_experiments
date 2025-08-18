@@ -32,6 +32,7 @@ jobs:
 
     run-experiment:
       runs-on: ubuntu-latest
+      needs: startup
 
       strategy:
           fail-fast: false
