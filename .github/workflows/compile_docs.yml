@@ -33,11 +33,23 @@ jobs:
         - name: Clone discopygal
           run: git clone --branch discopygal_${{ matrix.tag }} --depth 1 https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
+        - name: Install system dependencies
+          run: |
+                sudo apt-get update
+                sudo apt-get install -y \
+                cmake \
+                g++ \
+                libboost-all-dev \
+                libcgal-dev \
+                libgmp-dev \
+                libmpfr-dev \
+                python3-dev
+
         - name: Preparing requirements
           run: |
                 pip install pipenv
                 sed -i '/pyqt5designer = "*"/d' Pipfile # Remove bad dependency for linux
-                CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose --skip-lock
+                CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose
                 sudo apt install texlive-latex-extra dvipng
           working-directory: ./discopygal
 
