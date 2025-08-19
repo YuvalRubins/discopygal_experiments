@@ -49,7 +49,7 @@ jobs:
                 rm -rf discopygal/docs/_templates
                 mkdir discopygal/docs/_templates
                 cp docs_layout.html discopygal/docs/_templates/layout.html
-                echo "autodoc_mock_imports = ["RA"]" >> discopygal/docs/conf.py
+                echo "autodoc_mock_imports = [\"RA\"]" >> discopygal/docs/conf.py
 
         - name: Build docs
           run: |
