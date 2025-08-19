@@ -55,7 +55,7 @@ jobs:
           run: |
                 pipenv run make clean
                 pipenv run make html
-          working-directory: ./docs/discopygal
+          working-directory: ./discopygal/docs
 
         - name: Upload docs
           uses: actions/upload-artifact@v4
