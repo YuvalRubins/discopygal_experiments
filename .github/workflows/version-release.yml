@@ -65,7 +65,7 @@ jobs:
 
     check:
         runs-on: ${{ matrix.os }}
-        # needs: build
+        needs: build
         strategy:
             fail-fast: false
             matrix:
