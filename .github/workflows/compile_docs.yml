@@ -2,7 +2,7 @@ name: Compile docs
 
 env:
   PYTHON_VERSION: 3.11
-  GCC_MAJOR_VERSION: 12
+  GCC_MAJOR_VERSION: 9
   CONAN_REQUEST_TIMEOUT: 300
 
 on:
@@ -32,18 +32,6 @@ jobs:
 
         - name: Clone discopygal
           run: git clone --branch discopygal_${{ matrix.tag }} --depth 1 https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
-
-        - name: Install system dependencies
-          run: |
-                sudo apt-get update
-                sudo apt-get install -y \
-                cmake \
-                g++ \
-                libboost-all-dev \
-                libcgal-dev \
-                libgmp-dev \
-                libmpfr-dev \
-                python3-dev
 
         - name: Preparing requirements
           run: |
