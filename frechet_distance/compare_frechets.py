@@ -135,15 +135,15 @@ class CustomFrechetPaths(FrechetMatching):
 
 
 FUNCTIONS = {
-             "Har Peled": run_frechetlib_har_peled,
-             "Bringmann": run_freceht_bringmann,
-             "Bottleneck Tree (landmarks=50, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.25),
-             "Bottleneck Tree (landmarks=75, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=75, radius=0.25),
-             "Bottleneck Tree (landmarks=100, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=100, radius=0.25),
-             "Bottleneck Tree (landmarks=50, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.5),
-             "Bottleneck Tree (landmarks=200, radius=0.1)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
-             "Bottleneck Tree (landmarks=200, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
-             "Bottleneck Tree (landmarks=1000, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=1000, radius=0.5),
+            #  "Har Peled": run_frechetlib_har_peled,
+            #  "Bringmann": run_freceht_bringmann,
+            #  "Bottleneck Tree (landmarks=50, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.25),
+            #  "Bottleneck Tree (landmarks=75, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=75, radius=0.25),
+            #  "Bottleneck Tree (landmarks=100, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=100, radius=0.25),
+            #  "Bottleneck Tree (landmarks=50, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.5),
+            #  "Bottleneck Tree (landmarks=200, radius=0.1)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
+            #  "Bottleneck Tree (landmarks=200, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
+            #  "Bottleneck Tree (landmarks=1000, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=1000, radius=0.5),
              "Bottleneck Tree (landmarks=2000, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=2000, radius=0.25)
             }
 
@@ -153,14 +153,6 @@ def run_func(func, curve_1, curve_2, return_values: list):
     frechet_dist = func(curve_1, curve_2)
     calc_time = time.perf_counter() - start_time
     return_values.extend([frechet_dist, calc_time])
-
-
-# def run_func_process(func, curve_1, curve_2):
-#     return_values = []
-#     process = threading.Thread(target=run_func, args=(func, curve_1, curve_2, return_values))
-#     process.start()
-#     process.join()
-#     return return_values
 
 
 def print_mem_usage():
@@ -199,10 +191,10 @@ def main():
 
     did_init_har_peled = False
     results = pd.DataFrame(columns=["Curve number", "Method", "Frechet distance (avg)", "calc time (s) (avg)", "Frechet distance (std)", "calc time (s) (std)"])
-    for i in scenes_to_run:
-        print(f"\n**************** Curve {i} ********************")
-        big_curve_1 = get_curve(i, 0)
-        big_curve_2 = get_curve(i, 1)
+    for curve_index in scenes_to_run:
+        print(f"\n**************** Curve {curve_index} ********************")
+        big_curve_1 = get_curve(curve_index, 0)
+        big_curve_2 = get_curve(curve_index, 1)
         if not did_init_har_peled:
             run_frechetlib_har_peled(big_curve_1, big_curve_2)
             did_init_har_peled = True
@@ -212,7 +204,7 @@ def main():
             case_results = pd.DataFrame(columns=["frechet_dist", "calc_time"])
             for _ in range(REPETITIONS):
                 case_results.loc[len(case_results)] = create_run_func_process(func, big_curve_1, big_curve_2)
-            print(case_results)
+                print(case_results)
             case_results = case_results.astype("float").dropna()
             if len(case_results) == 0:
                 result = (func_name, float("NaN"), float("NaN"), float("NaN"), float("NaN"))
@@ -220,7 +212,7 @@ def main():
                 result = (func_name, *case_results.mean(), *case_results.std())
 
             print("{} -  Frechet dist: {}, calc time (s): {}".format(*result), flush=True)
-            results.loc[len(results)] = (i,) + result
+            results.loc[len(results)] = (curve_index,) + result
         # print(results.tail(len(FUNCTIONS)))
 
     results.to_csv("frechet_comparison.csv", index=False)
