@@ -15,7 +15,8 @@ jobs:
       strategy:
           fail-fast: false
           matrix:
-              tag: [1_4_1, 1_4_0, 1_3_0, 1_2_0, 1_1_1, 1_1_0, 1_0_8, 1_0_7, 1_0_5, 1_0_3]
+              # tag: [1_4_1, 1_4_0, 1_3_0, 1_2_0, 1_1_1, 1_1_0, 1_0_8, 1_0_7, 1_0_5, 1_0_3]
+              tag: [1_3_0]
 
       steps:
         - name: Checkout code
@@ -34,6 +35,7 @@ jobs:
 
         - name: Preparing requirements
           run: |
+                pipenv lock --clear
                 pip install pipenv
                 sed -i '/pyqt5designer = "*"/d' Pipfile # Remove bad dependency for linux
                 CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose
