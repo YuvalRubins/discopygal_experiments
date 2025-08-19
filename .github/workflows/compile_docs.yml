@@ -2,6 +2,7 @@ name: Compile docs
 
 env:
   PYTHON_VERSION: 3.11
+  # GCC_MAJOR_VERSION: 12
   GCC_MAJOR_VERSION: 9
   CONAN_REQUEST_TIMEOUT: 300
 
@@ -15,8 +16,8 @@ jobs:
       strategy:
           fail-fast: false
           matrix:
-              # tag: [1_4_1, 1_4_0, 1_3_0, 1_2_0, 1_1_1, 1_1_0, 1_0_8, 1_0_7, 1_0_5, 1_0_3]
-              tag: [1_3_0]
+              tag: [1_4_1, 1_4_0, 1_3_0, 1_2_0, 1_1_1, 1_1_0, 1_0_8, 1_0_7, 1_0_5, 1_0_3]
+              # tag: [1_3_0]
 
       steps:
         - name: Checkout code
