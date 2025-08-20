@@ -133,10 +133,10 @@ jobs:
                       #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
                        #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
 
-        - name: Download discopygal whl
-          uses: actions/download-artifact@v4
-          with:
-            name: package
+        # - name: Download discopygal whl
+        #   uses: actions/download-artifact@v4
+        #   with:
+        #     name: package
 
         - name: Install Discopygal
           # run: pip install -v ${{ needs.build.outputs.package_whl_file }}
