@@ -152,7 +152,7 @@ jobs:
 
         - name: Install test dependencies
           run: |
-                ldd /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
+                otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
                 pip install pytest pyautogui networkx
 
         # - name: Run tests
