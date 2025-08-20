@@ -33,6 +33,7 @@ jobs:
 
         - name: Preparing requirements
           run: |
+                rm requirements.txt
                 pip install pipenv
                 CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose
           working-directory: ./discopygal
@@ -150,7 +151,7 @@ jobs:
         #   run: cat ~/.conan2/profiles/default
 
         - name: Install test dependencies
-          run: pip install pytest pyautogui networkx
+          run: pip install pytest pyautogui
 
         # - name: Run tests
         #   if: runner.os != 'Windows'
