@@ -141,10 +141,10 @@ FUNCTIONS = {
             #  "Bottleneck Tree (landmarks=75, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=75, radius=0.25),
             #  "Bottleneck Tree (landmarks=100, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=100, radius=0.25),
             #  "Bottleneck Tree (landmarks=50, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=50, radius=0.5),
-            #  "Bottleneck Tree (landmarks=200, radius=0.1)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
+             "Bottleneck Tree (landmarks=200, radius=0.1)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
             #  "Bottleneck Tree (landmarks=200, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=200, radius=0.5),
             #  "Bottleneck Tree (landmarks=1000, radius=0.5)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=1000, radius=0.5),
-             "Bottleneck Tree (landmarks=2000, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=2000, radius=0.25)
+            #  "Bottleneck Tree (landmarks=2000, radius=0.25)": partial(CustomFrechetPaths.solve_frechet_for_paths, num_landmarks_in_parameter_space=2000, radius=0.25)
             }
 
 
