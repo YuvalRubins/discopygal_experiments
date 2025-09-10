@@ -126,6 +126,8 @@ jobs:
                        tools.apple:sdk_path=$SDK_PATH
                        tools.build:sysroot=$SDK_PATH
                        """ > ~/.conan2/profiles/default
+
+                  echo "core.net.http:timeout=300" >> ~/.conan2/global.conf
                       # [options]
                       # boost/*:without_locale=True
                       # boost/*:without_stacktrace_backtrace=True
