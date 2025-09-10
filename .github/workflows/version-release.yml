@@ -156,6 +156,9 @@ jobs:
 
         - name: Install test dependencies
           run: |
+                install_name_tool -change @rpath/libboost_log_setup.dylib \
+                  /usr/lib/libc++.1.dylib \
+                  CGALPY.cpython-310-darwin.so
                 otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
                 python -c "import CGALPY as CGALPY; print(CGALPY)"
            #     pip install pytest pyautogui networkx
