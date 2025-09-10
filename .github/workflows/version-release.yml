@@ -144,7 +144,7 @@ jobs:
           # run: pip install -v ${{ needs.build.outputs.package_whl_file }}
           # run: pip install -v discopygal_taucgl-1.4.1-py3-none-any.whl
           # run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings@fbd42cc5fd4751f69825cda909d3ce098e575316 --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON
-          run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON
+          run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings@ff59d2f232eac3c8253fe10d07130d16a46a61e6 --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON
 
         # - name: Clone discopygal
         #   run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git

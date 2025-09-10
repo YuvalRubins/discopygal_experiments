@@ -17,7 +17,6 @@ jobs:
           fail-fast: false
           matrix:
               tag: [1_4_1, 1_4_0, 1_3_0, 1_2_0, 1_1_1, 1_1_0, 1_0_8, 1_0_7, 1_0_5, 1_0_3]
-              # tag: [1_3_0]
 
       steps:
         - name: Checkout code
@@ -41,10 +40,6 @@ jobs:
                 CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose
                 sudo apt install texlive-latex-extra dvipng
           working-directory: ./discopygal
-
-        # - name: Install Revolving Areas
-        #   run: pipenv run pip install ../ra-1.0.0-cp311-cp311-linux_x86_64.whl
-        #   working-directory: ./discopygal
 
         - name: Set updated template
           run: |
