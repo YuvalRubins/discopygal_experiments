@@ -109,32 +109,33 @@ jobs:
                   echo "CONAN_DOWNLOAD_TIMEOUT=300" >> $GITHUB_ENV
                   echo "CC=clang" >> $GITHUB_ENV
                   echo "CXX=clang++" >> $GITHUB_ENV
-                  echo DYLD_LIBRARY_PATH=$CONAN_BOOST_ROOT/lib:$DYLD_LIBRARY_PATH >> $GITHUB_ENV
 
                   mkdir -p ~/.conan2/profiles
                   echo """
-                       [settings]
-                       os=Macos
-                       arch=armv8
-                       compiler=apple-clang
-                       compiler.cppstd=gnu17
-                       compiler.version=15
-                       compiler.libcxx=libc++
-                       build_type=Release
-
-                       [conf]
-                       tools.apple:sdk_path=$SDK_PATH
-                       tools.build:sysroot=$SDK_PATH
-                       """ > ~/.conan2/profiles/default
-
+                  [settings]
+                  os=Macos
+                  arch=armv8
+                  compiler=apple-clang
+                  compiler.cppstd=gnu17
+                  compiler.version=15
+                  compiler.libcxx=libc++
+                  build_type=Release
+                  
+                  [conf]
+                  tools.apple:sdk_path=$SDK_PATH
+                  tools.build:sysroot=$SDK_PATH
+                  """ > ~/.conan2/profiles/default
+                  
                   echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+                  brew install boost
                       # [options]
                       # boost/*:without_locale=True
                       # boost/*:without_stacktrace_backtrace=True
                       #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
                       #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
-                       #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
-
+                      #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
+                      # echo DYLD_LIBRARY_PATH=$CONAN_BOOST_ROOT/lib:$DYLD_LIBRARY_PATH >> $GITHUB_ENV
+                      
         # - name: Download discopygal whl
         #   uses: actions/download-artifact@v4
         #   with:
