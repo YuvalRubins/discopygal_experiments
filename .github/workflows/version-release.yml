@@ -154,7 +154,7 @@ jobs:
         #   run: cat ~/.conan2/profiles/default
 
         - name: Install test dependencies
-          run: pip install pytest pyautogui networkx
+          run: pip install pytest pyautogui
 
         # - name: Run tests
         #   if: runner.os != 'Windows'
@@ -170,6 +170,7 @@ jobs:
           run: |
                 sudo apt-get update
                 sudo apt-get install -y xvfb
+                export DISPLAY=:99
                 xvfb-run -a pytest --maxfail=1 --disable-warnings -q ./tests/solvers/test_solver_viewer.py
           working-directory: ./discopygal
 
