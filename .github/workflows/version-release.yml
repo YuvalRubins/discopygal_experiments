@@ -86,14 +86,14 @@ jobs:
           with:
               python-version: ${{ matrix.python-version }}
 
-        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+        - name: Setup for Linux
           if: runner.os == 'Linux'
           run:  |
                  sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
                  echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
                  echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
 
-        - name: Set compiler for macOS
+        - name: Setup for macOS
           if: runner.os == 'macOS'
           run:  |
                   pip install pyqt5
@@ -143,9 +143,8 @@ jobs:
 
         - name: Install test dependencies
           run: |
-                install_name_tool -add_rpath /opt/homebrew/opt/boost/lib /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
-                otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
-                python -c "import CGALPY as CGALPY; print(CGALPY)"
+                # install_name_tool -add_rpath /opt/homebrew/opt/boost/lib /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
+                # otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
                 pip install pytest pyautogui networkx
 
         # - name: Run tests
@@ -157,6 +156,8 @@ jobs:
           run: pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
+
+      # More macOS configs:
 
       # xcode-select --install
       # sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
