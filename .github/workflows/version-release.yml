@@ -70,12 +70,12 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-latest-large, macos-14-large, macos-14, macos-13, macos-13-xlarge, windows-2025]
+                os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-latest-large, macos-14-large, macos-14, macos-13, macos-13-xlarge, windows-2025]
                 # os: [ubuntu-latest, windows-latest, macos-latest]
-                os: [macos-latest]
+                # os: [macos-latest]
                 # os: [ubuntu-latest]
-                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-                python-version: ["3.10"]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                # python-version: ["3.10"]
 
         steps:
         - name: Checkout code
@@ -96,27 +96,27 @@ jobs:
         - name: Setup for macOS
           if: runner.os == 'macOS'
           run:  |
-                  pip install pyqt5
-                  brew install boost
-                  echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
-                  export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
+                 pip install pyqt5
+                 brew install boost
+                 echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
+                 export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
 
-                  mkdir -p ~/.conan2/profiles
-                  echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
-                  echo """
-                  [settings]
-                  os=Macos
-                  arch=armv8
-                  compiler=apple-clang
-                  compiler.cppstd=gnu17
-                  compiler.version=15
-                  compiler.libcxx=libc++
-                  build_type=Release
+                 mkdir -p ~/.conan2/profiles
+                 echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+                 echo """
+                 [settings]
+                 os=Macos
+                 arch=armv8
+                 compiler=apple-clang
+                 compiler.cppstd=gnu17
+                 compiler.version=15
+                 compiler.libcxx=libc++
+                 build_type=Release
 
-                  [conf]
-                  tools.apple:sdk_path=$SDK_PATH
-                  tools.build:sysroot=$SDK_PATH
-                  """ > ~/.conan2/profiles/default
+                 [conf]
+                 tools.apple:sdk_path=$SDK_PATH
+                 tools.build:sysroot=$SDK_PATH
+                 """ > ~/.conan2/profiles/default
 
         # - name: Download discopygal whl
         #   uses: actions/download-artifact@v4
@@ -137,10 +137,7 @@ jobs:
         #   run: cat ~/.conan2/profiles/default
 
         - name: Install test dependencies
-          run: |
-                # install_name_tool -add_rpath /opt/homebrew/opt/boost/lib /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
-                # otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
-                pip install pytest pyautogui networkx
+          run: pip install pytest pyautogui networkx
 
         # - name: Run tests
         #   if: runner.os != 'Windows'
@@ -175,3 +172,6 @@ jobs:
       # echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
       # echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
       # echo "CONAN_DOWNLOAD_TIMEOUT=600" >> $GITHUB_ENV
+
+      # install_name_tool -add_rpath /opt/homebrew/opt/boost/lib /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
+      # otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
