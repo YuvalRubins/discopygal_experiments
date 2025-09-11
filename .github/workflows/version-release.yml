@@ -107,6 +107,8 @@ jobs:
                   echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
                   echo "CONAN_DOWNLOAD_TIMEOUT=300" >> $GITHUB_ENV
 
+                  mkdir -p ~/.conan2/profiles
+                  # echo """
                   # [settings]
                   # os=Macos
                   # arch=armv8
@@ -115,8 +117,6 @@ jobs:
                   # compiler.version=15
                   # compiler.libcxx=libc++
                   # build_type=Release
-                  # mkdir -p ~/.conan2/profiles
-                  # echo """
 
                   # [conf]
                   # tools.apple:sdk_path=$SDK_PATH
