@@ -148,6 +148,20 @@ jobs:
           run: pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
+        - name: Run GUI tests (Linux)
+          if: runner.os == 'Linux'
+          run: |
+                sudo apt-get update
+                sudo apt-get install -y xvfb
+                xvfb-run -a pytest --maxfail=1 --disable-warnings -q ./tests/solvers/test_solver_viewer.py
+          working-directory: ./discopygal
+
+        - name: Run GUI tests
+          if: runner.os != 'Linux'
+          run: pytest --maxfail=1 --disable-warnings -q ./tests/solvers/test_solver_viewer.py
+          working-directory: ./discopygal
+
+
 
       # More macOS configs:
 
