@@ -101,29 +101,22 @@ jobs:
                   export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH
                   export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
 
-                  echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
-                  echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
-                  echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
-                  echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
-                  echo "CONAN_DOWNLOAD_TIMEOUT=600" >> $GITHUB_ENV
+                  mkdir -p ~/.conan2/profiles
+                  echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+                  echo """
+                  [settings]
+                  os=Macos
+                  arch=armv8
+                  compiler=apple-clang
+                  compiler.cppstd=gnu17
+                  compiler.version=15
+                  compiler.libcxx=libc++
+                  build_type=Release
 
-                  # mkdir -p ~/.conan2/profiles
-                  # echo """
-                  # [settings]
-                  # os=Macos
-                  # arch=armv8
-                  # compiler=apple-clang
-                  # compiler.cppstd=gnu17
-                  # compiler.version=15
-                  # compiler.libcxx=libc++
-                  # build_type=Release
-
-                  # [conf]
-                  # tools.apple:sdk_path=$SDK_PATH
-                  # tools.build:sysroot=$SDK_PATH
-                  # """ > ~/.conan2/profiles/default
-
-                  # echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+                  [conf]
+                  tools.apple:sdk_path=$SDK_PATH
+                  tools.build:sysroot=$SDK_PATH
+                  """ > ~/.conan2/profiles/default
 
         # - name: Download discopygal whl
         #   uses: actions/download-artifact@v4
@@ -176,3 +169,9 @@ jobs:
       #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
       #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
       # echo DYLD_LIBRARY_PATH=$CONAN_BOOST_ROOT/lib:$DYLD_LIBRARY_PATH >> $GITHUB_ENV
+
+      # echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
+      # echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
+      # echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
+      # echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
+      # echo "CONAN_DOWNLOAD_TIMEOUT=600" >> $GITHUB_ENV
