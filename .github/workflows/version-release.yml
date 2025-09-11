@@ -105,9 +105,9 @@ jobs:
                   echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
                   echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
                   echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
-                  echo "CONAN_DOWNLOAD_TIMEOUT=300" >> $GITHUB_ENV
+                  echo "CONAN_DOWNLOAD_TIMEOUT=600" >> $GITHUB_ENV
 
-                  mkdir -p ~/.conan2/profiles
+                  # mkdir -p ~/.conan2/profiles
                   # echo """
                   # [settings]
                   # os=Macos
@@ -123,7 +123,7 @@ jobs:
                   # tools.build:sysroot=$SDK_PATH
                   # """ > ~/.conan2/profiles/default
 
-                  echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+                  # echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
 
         # - name: Download discopygal whl
         #   uses: actions/download-artifact@v4
