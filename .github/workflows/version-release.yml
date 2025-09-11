@@ -70,10 +70,11 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-latest-large, ]
-                os: [macos-latest]
+                # os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-latest-large, macos-14-large, macos-14, macos-13, macos-13-xlarge, windows-2025]
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                # os: [macos-latest]
                 # os: [ubuntu-latest]
-                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
                 python-version: ["3.10"]
 
         steps:
@@ -96,19 +97,12 @@ jobs:
           if: runner.os == 'macOS'
           run:  |
                   pip install pyqt5
-                  # xcode-select --install
-                  echo `uname -m`
-                  # sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
                   export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
-                  # echo "SDK_PATH=$SDK_PATH"
-                  echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
-                  echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
-                  echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
-                  echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
-                  # echo "CMAKE_VERBOSE_MAKEFILE=ON" >> $GITHUB_ENV
-                  echo "CONAN_DOWNLOAD_TIMEOUT=300" >> $GITHUB_ENV
-                  # echo "CC=clang" >> $GITHUB_ENV
-                  # echo "CXX=clang++" >> $GITHUB_ENV
+                  # echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
+                  # echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
+                  # echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
+                  # echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
+                  # echo "CONAN_DOWNLOAD_TIMEOUT=300" >> $GITHUB_ENV
 
                   mkdir -p ~/.conan2/profiles
                   echo """
@@ -120,22 +114,15 @@ jobs:
                   compiler.version=15
                   compiler.libcxx=libc++
                   build_type=Release
-                  
+
                   [conf]
                   tools.apple:sdk_path=$SDK_PATH
                   tools.build:sysroot=$SDK_PATH
                   """ > ~/.conan2/profiles/default
-                  
+
                   echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
-                  # brew install boost
-                      # [options]
-                      # boost/*:without_locale=True
-                      # boost/*:without_stacktrace_backtrace=True
-                      #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
-                      #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
-                      #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
-                      # echo DYLD_LIBRARY_PATH=$CONAN_BOOST_ROOT/lib:$DYLD_LIBRARY_PATH >> $GITHUB_ENV
-                      
+                  brew install boost
+
         # - name: Download discopygal whl
         #   uses: actions/download-artifact@v4
         #   with:
@@ -169,3 +156,20 @@ jobs:
         - name: Run tests
           run: pytest -v ./tests -m sanity
           working-directory: ./discopygal
+
+
+      # xcode-select --install
+      # sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      # echo "SDK_PATH=$SDK_PATH"
+                  # echo "CMAKE_VERBOSE_MAKEFILE=ON" >> $GITHUB_ENV
+                  # echo "CC=clang" >> $GITHUB_ENV
+                  # echo "CXX=clang++" >> $GITHUB_ENV
+
+
+      # [options]
+      # boost/*:without_locale=True
+      # boost/*:without_stacktrace_backtrace=True
+      #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
+      #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
+      #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
+      # echo DYLD_LIBRARY_PATH=$CONAN_BOOST_ROOT/lib:$DYLD_LIBRARY_PATH >> $GITHUB_ENV
