@@ -71,11 +71,11 @@ jobs:
             fail-fast: false
             matrix:
                 # os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-latest-large, macos-14-large, macos-14, macos-13, macos-13-xlarge, windows-2025]
-                os: [ubuntu-latest, windows-latest, macos-latest]
-                # os: [macos-latest]
+                # os: [ubuntu-latest, windows-latest, macos-latest]
+                os: [macos-latest]
                 # os: [ubuntu-latest]
-                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-                # python-version: ["3.10"]
+                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                python-version: ["3.10"]
 
         steps:
         - name: Checkout code
