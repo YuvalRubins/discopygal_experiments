@@ -98,7 +98,7 @@ jobs:
           run:  |
                   pip install pyqt5
                   brew install boost
-                  export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH
+                  echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
                   export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
 
                   mkdir -p ~/.conan2/profiles
