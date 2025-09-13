@@ -115,25 +115,25 @@ jobs:
           run:  |
                  pip install pyqt5
                  brew install boost
-                 echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
-                 export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
+                #  echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
+                #  export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
 
-                 mkdir -p ~/.conan2/profiles
-                 echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
-                 echo """
-                 [settings]
-                 os=Macos
-                 arch=armv8
-                 compiler=apple-clang
-                 compiler.cppstd=gnu17
-                 compiler.version=15
-                 compiler.libcxx=libc++
-                 build_type=Release
+                #  mkdir -p ~/.conan2/profiles
+                #  echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+                #  echo """
+                #  [settings]
+                #  os=Macos
+                #  arch=armv8
+                #  compiler=apple-clang
+                #  compiler.cppstd=gnu17
+                #  compiler.version=15
+                #  compiler.libcxx=libc++
+                #  build_type=Release
 
-                 [conf]
-                 tools.apple:sdk_path=$SDK_PATH
-                 tools.build:sysroot=$SDK_PATH
-                 """ > ~/.conan2/profiles/default
+                #  [conf]
+                #  tools.apple:sdk_path=$SDK_PATH
+                #  tools.build:sysroot=$SDK_PATH
+                #  """ > ~/.conan2/profiles/default
 
         - name: Download discopygal whl
           uses: actions/download-artifact@v4
@@ -149,9 +149,9 @@ jobs:
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-        # - name: print conan profile
+        - name: print conan profile
+          run: cat ~/.conan2/profiles/default
         #   if: failure()
-        #   run: cat ~/.conan2/profiles/default
 
         - name: Install test dependencies
           run: pip install pytest pyautogui
