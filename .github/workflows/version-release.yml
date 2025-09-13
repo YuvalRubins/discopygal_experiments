@@ -260,7 +260,7 @@ jobs:
             name: starter_package
 
         - name: Install Discopygal
-          run: pip install -v ${{ needs.build_starter_package.outputs.starter_package_whl_file }}
+          run: pip install -v ${{ needs.build_package.outputs.starter_package_whl_file }}
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
