@@ -15,6 +15,7 @@ jobs:
 
         outputs:
             package_whl_file: ${{ steps.build_package.outputs.package_whl_file }}
+            starter_package_whl_file: ${{ steps.build_package.outputs.starter_package_whl_file }}
 
         steps:
         - name: Checkout code
@@ -42,6 +43,20 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: package
+            path: discopygal/dist/
+
+        - name: Build starter package
+          id: build_starter_package
+          run: |
+                rm -rf dist
+                python scripts/build_starter_package.py
+                echo "starter_package_whl_file=$(basename `ls dist/*.whl`)" >> $GITHUB_OUTPUT
+          working-directory: ./discopygal
+
+        - name: Upload Discopygal package
+          uses: actions/upload-artifact@v4
+          with:
+            name: starter_package
             path: discopygal/dist/
 
     build_docs:
@@ -91,7 +106,7 @@ jobs:
                 # os: [ubuntu-latest, windows-latest, macos-latest]
                 # os: [macos-latest]
                 # os: [ubuntu-latest]
-                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
                 # python-version: ["3.10"]
 
         steps:
@@ -149,12 +164,12 @@ jobs:
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-        - name: print conan profile
-          run: cat ~/.conan2/profiles/default
+        # - name: print conan profile
         #   if: failure()
+        #   run: cat ~/.conan2/profiles/default
 
         - name: Install test dependencies
-          run: pip install pytest pyautogui
+          run: pip install pytest
 
         # - name: Run tests
         #   if: runner.os != 'Windows'
@@ -207,3 +222,52 @@ jobs:
 
       # install_name_tool -add_rpath /opt/homebrew/opt/boost/lib /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
       # otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
+
+    check_starter_package:
+        runs-on: ${{ matrix.os }}
+        needs: build_package
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-14, macos-13, windows-2025]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v5
+          with:
+              python-version: ${{ matrix.python-version }}
+
+        - name: Setup for Linux
+          if: runner.os == 'Linux'
+          run:  |
+                 sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+                 echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+                 echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+
+        - name: Setup for macOS
+          if: runner.os == 'macOS'
+          run:  |
+                 pip install pyqt5
+                 brew install boost
+
+        - name: Download discopygal whl
+          uses: actions/download-artifact@v4
+          with:
+            name: starter_package
+
+        - name: Install Discopygal
+          run: pip install -v ${{ needs.build_package.outputs.starter_package_whl_file }}
+
+        - name: Clone discopygal
+          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+
+        - name: Install test dependencies
+          run: pip install pytest
+
+        - name: Run tests
+          run: pytest -v ./tests -m starter
+          working-directory: ./discopygal
