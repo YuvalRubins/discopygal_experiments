@@ -269,5 +269,5 @@ jobs:
           run: pip install pytest
 
         - name: Run tests
-          run: pytest -v ./tests -m starter
+          run: pytest -v ./tests/solvers/test_solvers.py ./tests/solvers/test_starter.py -m starter
           working-directory: ./discopygal
