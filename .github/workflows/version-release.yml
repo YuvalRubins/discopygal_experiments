@@ -150,7 +150,7 @@ jobs:
           run: pip install pytest
 
         - name: Run tests
-          run: pytest -vs ./tests -m sanity
+          run: pytest -v ./tests -m sanity
           working-directory: ./discopygal
 
         - name: Run GUI tests (Linux)
