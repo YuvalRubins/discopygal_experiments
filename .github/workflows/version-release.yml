@@ -4,7 +4,7 @@ env:
   PYTHON_VERSION: 3.12.3
   GCC_MAJOR_VERSION: 12
   CONAN_REQUEST_TIMEOUT: 300
-  QT_QPA_PLATFORM: offscreen
+  # QT_QPA_PLATFORM: offscreen
   CI: 1
 
 
@@ -156,7 +156,6 @@ jobs:
         - name: Run GUI tests (Linux)
           if: runner.os == 'Linux'
           run: |
-                sudo apt-get update
                 sudo apt-get install -y xvfb
                 export DISPLAY=:99
                 xvfb-run -a pytest -vs ./tests -m gui
@@ -219,9 +218,8 @@ jobs:
         - name: Run GUI tests (Linux)
           if: runner.os == 'Linux'
           run: |
-                sudo apt-get update
                 sudo apt-get install -y xvfb
-                export DISPLAY=:99
+                # export DISPLAY=:99
                 xvfb-run -a pytest -vs ./tests/solvers/test_solver_viewer.py -m starter
           working-directory: ./discopygal
 
