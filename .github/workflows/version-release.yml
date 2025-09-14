@@ -5,6 +5,7 @@ env:
   GCC_MAJOR_VERSION: 12
   CONAN_REQUEST_TIMEOUT: 300
   QT_QPA_PLATFORM: offscreen
+  CI: 1
 
 
 on:
