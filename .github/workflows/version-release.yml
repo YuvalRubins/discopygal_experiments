@@ -62,42 +62,42 @@ jobs:
             name: starter_package
             path: discopygal/dist/
 
-    # build_docs:
-    #     runs-on: ubuntu-latest
+    build_docs:
+        runs-on: ubuntu-latest
 
-    #     steps:
-    #     - name: Checkout code
-    #       uses: actions/checkout@v4
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-    #     - name: Set up Python
-    #       uses: actions/setup-python@v5
-    #       with:
-    #         python-version: ${{ env.PYTHON_VERSION }}
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: ${{ env.PYTHON_VERSION }}
 
-    #     - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
-    #       run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+        - name: Install GCC ${{ env.GCC_MAJOR_VERSION }}
+          run: sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
 
-    #     - name: Clone discopygal
-    #       run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
+        - name: Clone discopygal
+          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-    #     - name: Preparing requirements
-    #       run: |
-    #             pip install pipenv
-    #             CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose
-    #             sudo apt install texlive-latex-extra dvipng
-    #       working-directory: ./discopygal
+        - name: Preparing requirements
+          run: |
+                pip install pipenv
+                CC=gcc-${{ env.GCC_MAJOR_VERSION }} CXX=g++-${{ env.GCC_MAJOR_VERSION }} pipenv install --python $(which python) --dev --verbose
+                sudo apt install texlive-latex-extra dvipng
+          working-directory: ./discopygal
 
-    #     - name: Build docs
-    #       run: |
-    #             pipenv run make clean
-    #             pipenv run make html
-    #       working-directory: ./discopygal/docs
+        - name: Build docs
+          run: |
+                pipenv run make clean
+                pipenv run make html
+          working-directory: ./discopygal/docs
 
-    #     - name: Upload docs
-    #       uses: actions/upload-artifact@v4
-    #       with:
-    #         path: discopygal/docs/_build/html
-    #         name: html_docs
+        - name: Upload docs
+          uses: actions/upload-artifact@v4
+          with:
+            path: discopygal/docs/_build/html
+            name: html_docs
 
     check_package:
         runs-on: ${{ matrix.os }}
@@ -105,13 +105,13 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                # os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-14, macos-13, windows-2025]
+                os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-14, macos-13, windows-2025]
                 # os: [ubuntu-latest, windows-latest, macos-latest]
                 # os: [macos-latest]
                 # os: [ubuntu-latest]
-                os: [windows-latest]
-                # python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-                python-version: ["3.10"]
+                # os: [windows-latest]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+                # python-version: ["3.10"]
 
         steps:
         - name: Checkout code
@@ -134,25 +134,6 @@ jobs:
           run:  |
                  pip install pyqt5
                  brew install boost
-                #  echo "DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/opt/boost/lib:$DYLD_FALLBACK_LIBRARY_PATH" >> $GITHUB_ENV
-                #  export SDK_PATH=$(xcrun --sdk macosx --show-sdk-path)
-
-                #  mkdir -p ~/.conan2/profiles
-                #  echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
-                #  echo """
-                #  [settings]
-                #  os=Macos
-                #  arch=armv8
-                #  compiler=apple-clang
-                #  compiler.cppstd=gnu17
-                #  compiler.version=15
-                #  compiler.libcxx=libc++
-                #  build_type=Release
-
-                #  [conf]
-                #  tools.apple:sdk_path=$SDK_PATH
-                #  tools.build:sysroot=$SDK_PATH
-                #  """ > ~/.conan2/profiles/default
 
         - name: Download discopygal whl
           uses: actions/download-artifact@v4
@@ -161,119 +142,90 @@ jobs:
 
         - name: Install Discopygal
           run: pip install -v ${{ needs.build_package.outputs.package_whl_file }}
-          # run: pip install -v discopygal_taucgl-1.4.1-py3-none-any.whl
-          # run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings@fbd42cc5fd4751f69825cda909d3ce098e575316 --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON
-          # run: pip install -v git+https://bitbucket.org/taucgl/cgal-python-bindings@fix_compilation_for_macos --config-settings=cmake.define.CMAKE_VERBOSE_MAKEFILE=ON
 
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
-        # - name: print conan profile
-        #   if: failure()
-        #   run: cat ~/.conan2/profiles/default
+        - name: Install test dependencies
+          run: pip install pytest
+
+        - name: Run tests
+          run: pytest -vs ./tests -m sanity
+          working-directory: ./discopygal
+
+        - name: Run GUI tests (Linux)
+          if: runner.os == 'Linux'
+          run: |
+                sudo apt-get update
+                sudo apt-get install -y xvfb
+                export DISPLAY=:99
+                xvfb-run -a pytest -vs ./tests -m gui
+          working-directory: ./discopygal
+
+        - name: Run GUI tests
+          if: runner.os != 'Linux'
+          run: pytest -vs ./tests -m gui
+          working-directory: ./discopygal
+
+    check_starter_package:
+        runs-on: ${{ matrix.os }}
+        needs: build_package
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-14, macos-13, windows-2025]
+                python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v5
+          with:
+              python-version: ${{ matrix.python-version }}
+
+        - name: Setup for Linux
+          if: runner.os == 'Linux'
+          run:  |
+                 sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+                 echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+                 echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+
+        - name: Setup for macOS
+          if: runner.os == 'macOS'
+          run:  |
+                 pip install pyqt5
+                 brew install boost
+
+        - name: Download discopygal whl
+          uses: actions/download-artifact@v4
+          with:
+            name: starter_package
+
+        - name: Install Discopygal
+          run: pip install -v ${{ needs.build_package.outputs.starter_package_whl_file }}
+
+        - name: Clone discopygal
+          run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
         - name: Install test dependencies
           run: pip install pytest
 
-        # - name: Run tests
-        #   if: runner.os != 'Windows'
-        #   run: xvfb-run -a pytest -v ./tests
-        #   working-directory: ./discopygal
+        - name: Run tests
+          run: pytest -vs ./tests/solvers/test_solvers.py ./tests/solvers/test_starter.py -m starter
+          working-directory: ./discopygal
 
-        # - name: Run tests
-        #   run: pytest -v ./tests -m sanity
-        #   working-directory: ./discopygal
-
-        # - name: Run GUI tests (Linux)
-        #   if: runner.os == 'Linux'
-        #   run: |
-        #         sudo apt-get update
-        #         sudo apt-get install -y xvfb
-        #         export DISPLAY=:99
-        #         xvfb-run -a pytest --maxfail=1 --disable-warnings -q ./tests/solvers/test_solver_viewer.py
-        #   working-directory: ./discopygal
+        - name: Run GUI tests (Linux)
+          if: runner.os == 'Linux'
+          run: |
+                sudo apt-get update
+                sudo apt-get install -y xvfb
+                export DISPLAY=:99
+                xvfb-run -a pytest -vs ./tests/solvers/test_solver_viewer.py -m starter
+          working-directory: ./discopygal
 
         - name: Run GUI tests
           if: runner.os != 'Linux'
-          run: |
-                pip install pyautogui
-                pytest -vvvs ./tests/solvers/test_solver_viewer.py
+          run: pytest -vs ./tests/solvers/test_solver_viewer.py -m starter
           working-directory: ./discopygal
-
-
-
-      # More macOS configs:
-
-      # xcode-select --install
-      # sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-      # echo "SDK_PATH=$SDK_PATH"
-                  # echo "CMAKE_VERBOSE_MAKEFILE=ON" >> $GITHUB_ENV
-                  # echo "CC=clang" >> $GITHUB_ENV
-                  # echo "CXX=clang++" >> $GITHUB_ENV
-
-
-      # [options]
-      # boost/*:without_locale=True
-      # boost/*:without_stacktrace_backtrace=True
-      #  tools.build:sharedlinkflags=[\"-arch\", \"arm64\"]
-      #  tools.build:exelinkflags=[\"-arch\", \"arm64\"]
-      #  tools.build:cxxflags=[\"-arch\", \"arm64\"]
-      # echo DYLD_LIBRARY_PATH=$CONAN_BOOST_ROOT/lib:$DYLD_LIBRARY_PATH >> $GITHUB_ENV
-
-      # echo "CXXFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
-      # echo "CPPFLAGS=-isysroot $SDK_PATH" >> $GITHUB_ENV
-      # echo "CMAKE_OSX_SYSROOT=$SDK_PATH" >> $GITHUB_ENV
-      # echo "CMAKE_OSX_ARCHITECTURES=arm64" >> $GITHUB_ENV
-      # echo "CONAN_DOWNLOAD_TIMEOUT=600" >> $GITHUB_ENV
-
-      # install_name_tool -add_rpath /opt/homebrew/opt/boost/lib /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
-      # otool -L /Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages/CGALPY/CGALPY.cpython-310-darwin.so
-
-    # check_starter_package:
-    #     runs-on: ${{ matrix.os }}
-    #     needs: build_package
-    #     strategy:
-    #         fail-fast: false
-    #         matrix:
-    #             os: [ubuntu-latest, windows-latest, macos-latest, ubuntu-22.04, macos-14, macos-13, windows-2025]
-    #             python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-
-    #     steps:
-    #     - name: Checkout code
-    #       uses: actions/checkout@v4
-
-    #     - name: Set up Python ${{ matrix.python-version }}
-    #       uses: actions/setup-python@v5
-    #       with:
-    #           python-version: ${{ matrix.python-version }}
-
-    #     - name: Setup for Linux
-    #       if: runner.os == 'Linux'
-    #       run:  |
-    #              sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
-    #              echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
-    #              echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
-
-    #     - name: Setup for macOS
-    #       if: runner.os == 'macOS'
-    #       run:  |
-    #              pip install pyqt5
-    #              brew install boost
-
-    #     - name: Download discopygal whl
-    #       uses: actions/download-artifact@v4
-    #       with:
-    #         name: starter_package
-
-    #     - name: Install Discopygal
-    #       run: pip install -v ${{ needs.build_package.outputs.starter_package_whl_file }}
-
-    #     - name: Clone discopygal
-    #       run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
-
-    #     - name: Install test dependencies
-    #       run: pip install pytest
-
-    #     - name: Run tests
-    #       run: pytest -v ./tests/solvers/test_solvers.py ./tests/solvers/test_starter.py -m starter
-    #       working-directory: ./discopygal
