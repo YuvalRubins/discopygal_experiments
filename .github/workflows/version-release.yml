@@ -4,6 +4,8 @@ env:
   PYTHON_VERSION: 3.12.3
   GCC_MAJOR_VERSION: 12
   CONAN_REQUEST_TIMEOUT: 300
+  QT_QPA_PLATFORM: offscreen
+
 
 on:
   workflow_dispatch:
@@ -194,7 +196,7 @@ jobs:
           if: runner.os != 'Linux'
           run: |
                 pip install pyautogui
-                pytest -vs ./tests/solvers/test_solver_viewer.py
+                pytest -vvvs ./tests/solvers/test_solver_viewer.py
           working-directory: ./discopygal
 
 
