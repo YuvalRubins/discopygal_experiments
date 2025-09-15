@@ -80,6 +80,11 @@ jobs:
         - name: Clone discopygal
           run: git clone https://${{ secrets.MY_GITHUB_PAT }}@github.com/TAU-CGL/discopygal.git
 
+        - name: Increase conan timeout
+          run: |
+                mkdir -p ~/.conan2
+                echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+
         - name: Preparing requirements
           run: |
                 pip install pipenv
