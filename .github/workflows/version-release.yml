@@ -122,12 +122,12 @@ jobs:
           with:
               python-version: ${{ matrix.python-version }}
 
-        - name: Setup for Linux
-          if: runner.os == 'Linux'
-          run:  |
-                 sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
-                 echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
-                 echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+        # - name: Setup for Linux
+        #   if: runner.os == 'Linux'
+        #   run:  |
+        #          sudo apt install gcc-${{ env.GCC_MAJOR_VERSION }} g++-${{ env.GCC_MAJOR_VERSION }}
+        #          echo "CC=gcc-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
+        #          echo "CXX=g++-${{ env.GCC_MAJOR_VERSION }}" >> $GITHUB_ENV
 
         - name: Setup for macOS
           if: runner.os == 'macOS'
