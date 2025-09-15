@@ -140,6 +140,11 @@ jobs:
           with:
             name: package
 
+        - name: Increase conan timeout
+          run: |
+                mkdir -p ~/.conan2
+                echo "core.net.http:timeout=600" >> ~/.conan2/global.conf
+
         - name: Install Discopygal
           run: pip install -v ${{ needs.build_package.outputs.package_whl_file }}
 
