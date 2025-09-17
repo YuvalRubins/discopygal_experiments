@@ -135,9 +135,7 @@ jobs:
 
         - name: Setup for macOS
           if: runner.os == 'macOS'
-          run:  |
-                 pip install pyqt5
-                #  brew install boost
+          run: pip install pyqt5
 
         - name: Download discopygal whl
           uses: actions/download-artifact@v4
@@ -202,9 +200,7 @@ jobs:
 
         - name: Setup for macOS
           if: runner.os == 'macOS'
-          run:  |
-                 pip install pyqt5
-                 brew install boost
+          run: pip install pyqt5
 
         - name: Download discopygal whl
           uses: actions/download-artifact@v4
