@@ -3,7 +3,6 @@ name: Version release
 env:
   PYTHON_VERSION: 3.12.3
   GCC_MAJOR_VERSION: 12
-  # CONAN_REQUEST_TIMEOUT: 600
   QT_QPA_PLATFORM: offscreen
   CI: 1
 
@@ -138,7 +137,7 @@ jobs:
           if: runner.os == 'macOS'
           run:  |
                  pip install pyqt5
-                 brew install boost
+                #  brew install boost
 
         - name: Download discopygal whl
           uses: actions/download-artifact@v4
