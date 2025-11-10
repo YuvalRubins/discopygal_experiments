@@ -157,13 +157,20 @@ def plot_multi_algs(all_scenarios):
     # plot(all_scenarios['calc_time'], all_scenarios['total_path_length'], 'calc_time', 'path_length', alg_per_scenario)
     # plot(all_scenarios['budget'], all_scenarios['total_path_length'], 'budget', 'path_length', alg_per_scenario)
     plot(all_scenarios['budget'], all_scenarios['total_path_length_ratio_to_staggered_grid'], 'budget', 'path_length_ratio', alg_per_scenario, labels_filter=lambda s: s != "StaggeredGrid")
-    # plot(all_scenarios['calc_time'], all_scenarios['total_path_length_ratio_to_staggered_grid'], 'calc_time', 'path_length_ratio', alg_per_scenario, labels_filter=lambda s: s != "StaggeredGrid")
+    plot(all_scenarios['calc_time'], all_scenarios['total_path_length_ratio_to_staggered_grid'], 'calc_time', 'path_length_ratio', alg_per_scenario, labels_filter=lambda s: s != "StaggeredGrid")
     # plot(all_scenarios['calc_time'], all_scenarios['total_path_length'], 'calc_time', 'path_length', alg_per_scenario, labels_filter=lambda s: s == "StaggeredGrid")
 
     # for operation in mean_time_to_inc_operation_ratio.columns:
         # plot(all_scenarios['scenario_index'], operations_count[operation], 'scenario_index', 'operation count', alg_per_scenario, operation)
         # plot(all_scenarios['scenario_index'], mean_time_to_inc_operation_ratio[operation], 'scenario_index', 'mean time to inc operation ratio', alg_per_scenario, operation)
     # plot(all_scenarios['expected_budget'], all_scenarios['budget'], 'Expected budget', 'Actual budget', alg_per_scenario, labels_filter=lambda s: s != "StaggeredGrid")
+
+    for scene in scenes:
+        scenarios = all_scenarios[all_scenarios["scene_path"] == scene]
+        alg_per_scenario_for_scene = [scenarios.loc[i, 'solver_class'] for i in scenarios.index]
+        # plot(range(len(scenarios['scenario_index'])), scenarios['total_path_length'], 'index', 'total_path_length', alg_per_scenario_for_scene, title=scene)
+        # plot(scenarios['calc_time'], scenarios['total_path_length'], 'calc_time', 'total_path_length', alg_per_scenario_for_scene, title=scene)
+        plot(scenarios['calc_time'], scenarios['total_path_length_ratio_to_staggered_grid'], 'calc_time', 'path_length_ratio', alg_per_scenario_for_scene, title=scene)
 
 
 def main():
